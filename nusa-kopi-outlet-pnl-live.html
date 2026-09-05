@@ -1,0 +1,2043 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nusa Kopi — Outlet Contribution Analysis FY2025</title>
+<meta name="description" content="Live outlet contribution analysis for Nusa Kopi Group Sdn Bhd, FY2025, read directly from the Outlet P&amp;L tab of the finance pack.">
+<style>
+/* ─────────────────────────────────────────────────────────────
+   Board pack: committed to a light surface so it prints as one
+   document. Palette validated for CVD separation on #ffffff.
+   ───────────────────────────────────────────────────────────── */
+:root{
+  color-scheme: light;
+
+  --plane:#f4f4f1;
+  --surface:#ffffff;
+  --surface-2:#fafaf8;
+  --surface-3:#f0f0ec;
+
+  --ink:#0b0b0b;
+  --ink-2:#52514e;
+  --muted:#898781;
+
+  --rule:#e4e3dd;
+  --rule-2:#cfcec7;
+  --rule-3:#b3b2aa;
+
+  /* categorical — format identity (validated all-pairs, light/#fff) */
+  --fmt-flagship:#2a78d6;
+  --fmt-standard:#eb6834;
+  --fmt-kiosk:#1baf7a;
+  /* 4th slot, adjacent-validated, used only in the cost stack */
+  --cost-1:#2a78d6;
+  --cost-2:#eb6834;
+  --cost-3:#1baf7a;
+  --cost-4:#eda100;
+
+  --neutral-mark:#c9c8c1;
+
+  /* status — reserved, never a series */
+  --good:#0ca30c;
+  --warning:#fab219;
+  --critical:#d03b3b;
+  --critical-ink:#a3302f;
+  --good-ink:#006300;
+  --good-wash:#eef6ee;
+  --critical-wash:#fceceb;
+  --warn-wash:#fdf5e3;
+
+  --grid:#ebeae4;
+  --axis:#c3c2b7;
+
+  --f-body:system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --shadow:0 1px 1px rgba(11,11,11,.04), 0 10px 28px -22px rgba(11,11,11,.30);
+  --maxw:1360px;
+}
+
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;
+  background:var(--plane);
+  color:var(--ink);
+  font-family:var(--f-body);
+  font-size:14px;
+  line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+}
+.num{font-variant-numeric:tabular-nums; font-feature-settings:"tnum" 1}
+
+.wrap{max-width:var(--maxw); margin:0 auto; padding:28px 24px 72px}
+
+/* ── Title block ───────────────────────────────────────────── */
+.masthead{
+  background:var(--surface);
+  border:1px solid var(--rule);
+  border-radius:10px;
+  box-shadow:var(--shadow);
+  padding:26px 30px;
+  display:flex;
+  flex-wrap:wrap;
+  gap:24px;
+  align-items:flex-start;
+  justify-content:space-between;
+}
+.masthead .eyebrow{
+  font-size:11px; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--muted); font-weight:600; margin:0 0 8px;
+}
+.masthead h1{
+  margin:0; font-size:27px; line-height:1.18; font-weight:650; letter-spacing:-.015em;
+}
+.masthead .sub{
+  margin:6px 0 0; font-size:16px; color:var(--ink-2); font-weight:500;
+}
+.masthead .meta{
+  margin:14px 0 0; font-size:12.5px; color:var(--ink-2);
+  display:flex; flex-wrap:wrap; gap:6px 18px;
+}
+.masthead .meta b{font-weight:600; color:var(--ink)}
+.masthead .identity{flex:1 1 420px; min-width:0}
+.controls{flex:0 0 auto; display:flex; flex-direction:column; align-items:flex-end; gap:10px}
+button#refresh{
+  font:inherit; font-weight:600; font-size:13px;
+  padding:9px 18px; border-radius:7px; cursor:pointer;
+  border:1px solid var(--rule-2); background:var(--surface);
+  color:var(--ink); transition:background .12s ease, border-color .12s ease;
+  display:inline-flex; align-items:center; gap:8px;
+}
+button#refresh:hover:not(:disabled){background:var(--surface-3); border-color:var(--rule-3)}
+button#refresh:disabled{opacity:.55; cursor:progress}
+button#refresh .spin{
+  width:12px; height:12px; border-radius:50%;
+  border:2px solid var(--rule-2); border-top-color:var(--ink-2);
+  display:none;
+}
+button#refresh.loading .spin{display:inline-block; animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.stamp{font-size:12px; color:var(--muted); text-align:right}
+.stamp b{color:var(--ink-2); font-weight:600}
+
+/* ── State panels ──────────────────────────────────────────── */
+.panel{
+  margin-top:20px; border-radius:10px; padding:22px 26px;
+  border:1px solid var(--rule); background:var(--surface); box-shadow:var(--shadow);
+}
+.panel h2{margin:0 0 8px; font-size:16px; font-weight:650}
+.panel p{margin:0 0 10px; color:var(--ink-2); max-width:78ch}
+.panel ul{margin:8px 0 0; padding-left:20px; color:var(--ink-2)}
+.panel li{margin:5px 0}
+.panel code{
+  font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  font-size:12.5px; background:var(--surface-3); padding:2px 6px; border-radius:4px;
+  border:1px solid var(--rule);
+}
+.panel.error{border-left:3px solid var(--critical); background:var(--surface)}
+.panel.setup{border-left:3px solid var(--warning)}
+.panel .tag{
+  display:inline-block; font-size:11px; letter-spacing:.1em; text-transform:uppercase;
+  font-weight:700; margin-bottom:10px;
+}
+.panel.error .tag{color:var(--critical-ink)}
+.panel.setup .tag{color:#8a5f00}
+
+#loading{
+  margin-top:20px; padding:56px 26px; text-align:center;
+  color:var(--muted); font-size:13.5px;
+  border:1px dashed var(--rule-2); border-radius:10px; background:var(--surface-2);
+}
+
+/* Refetch: hold the previous render, no skeleton flash */
+#report.stale{opacity:.45; transition:opacity .15s ease}
+
+/* ── Sections & cards ──────────────────────────────────────── */
+.section-head{
+  margin:34px 0 14px; display:flex; align-items:baseline; gap:12px; flex-wrap:wrap;
+}
+.section-head .n{
+  font-size:11px; font-weight:700; letter-spacing:.1em; color:var(--muted);
+  border:1px solid var(--rule-2); border-radius:4px; padding:2px 7px; line-height:1.6;
+}
+.section-head h2{margin:0; font-size:17px; font-weight:650; letter-spacing:-.01em}
+.section-head p{margin:0; font-size:13px; color:var(--ink-2); flex:1 1 320px}
+
+.card{
+  background:var(--surface); border:1px solid var(--rule); border-radius:10px;
+  box-shadow:var(--shadow); padding:20px 22px;
+}
+.card h3{margin:0 0 3px; font-size:14.5px; font-weight:650}
+.card .note{margin:0 0 14px; font-size:12.5px; color:var(--ink-2)}
+.grid{display:grid; gap:18px}
+.g2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.g3{grid-template-columns:repeat(3,minmax(0,1fr))}
+@media (max-width:980px){.g2,.g3{grid-template-columns:1fr}}
+
+/* ── KPI tiles ─────────────────────────────────────────────── */
+.kpis{display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:14px; margin-top:20px}
+@media (max-width:1180px){.kpis{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:720px){.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.kpi{
+  background:var(--surface); border:1px solid var(--rule); border-radius:10px;
+  box-shadow:var(--shadow); padding:16px 18px 15px; display:flex; flex-direction:column; gap:3px;
+}
+.kpi .label{
+  font-size:11px; letter-spacing:.07em; text-transform:uppercase;
+  color:var(--muted); font-weight:650;
+}
+.kpi .value{font-size:25px; font-weight:640; letter-spacing:-.02em; line-height:1.22}
+.kpi .value.small{font-size:21px}
+.kpi .sub{font-size:12px; color:var(--ink-2)}
+.kpi .breakdown{display:flex; gap:12px; flex-wrap:wrap; margin-top:4px; font-size:12px; color:var(--ink-2)}
+.kpi .breakdown span{display:inline-flex; align-items:center; gap:5px}
+
+.swatch{width:9px; height:9px; border-radius:2px; display:inline-block; flex:none}
+.sw-flagship{background:var(--fmt-flagship)}
+.sw-standard{background:var(--fmt-standard)}
+.sw-kiosk{background:var(--fmt-kiosk)}
+
+/* ── Legend ────────────────────────────────────────────────── */
+.legend{display:flex; flex-wrap:wrap; gap:8px 18px; margin:0 0 12px; font-size:12px; color:var(--ink-2)}
+.legend span{display:inline-flex; align-items:center; gap:6px}
+
+/* ── Charts ────────────────────────────────────────────────── */
+.chartbox{position:relative; width:100%}
+.chartbox canvas{display:block; width:100% !important}
+
+/* ── Tables ────────────────────────────────────────────────── */
+.tablewrap{overflow-x:auto; border:1px solid var(--rule); border-radius:8px; background:var(--surface)}
+table{border-collapse:collapse; width:100%; font-size:12.5px}
+thead th{
+  position:sticky; top:0; z-index:2;
+  background:var(--surface-3); color:var(--ink-2);
+  font-weight:650; font-size:11px; letter-spacing:.04em; text-transform:uppercase;
+  text-align:right; padding:10px 11px; white-space:nowrap;
+  border-bottom:1px solid var(--rule-2); cursor:pointer; user-select:none;
+}
+thead th:first-child, thead th.txt{text-align:left}
+thead th:hover{background:#e9e8e2; color:var(--ink)}
+thead th .arrow{opacity:.32; margin-left:5px; font-size:10px}
+thead th.sorted{color:var(--ink); background:#e9e8e2}
+thead th.sorted .arrow{opacity:1}
+tbody td{
+  padding:9px 11px; text-align:right; white-space:nowrap;
+  border-bottom:1px solid var(--rule); font-variant-numeric:tabular-nums;
+}
+tbody td.txt{text-align:left; font-variant-numeric:normal}
+tbody td.wrap{white-space:normal}
+tbody tr:last-child td{border-bottom:none}
+tbody tr:hover td{background:var(--surface-2)}
+tbody tr.best td{background:var(--good-wash)}
+tbody tr.best:hover td{background:#e6f2e6}
+tbody tr.flagged td{background:var(--critical-wash)}
+tbody tr.flagged:hover td{background:#f9e2e0}
+tbody tr.flagged td.code, tbody tr.flagged td.contrib{color:var(--critical-ink); font-weight:650}
+tbody tr.best td.code, tbody tr.best td.contrib{color:var(--good-ink); font-weight:650}
+.mark{font-size:11px; margin-right:5px}
+.code-cell{display:inline-flex; align-items:center; gap:7px}
+
+.simple-table td{border-bottom:1px solid var(--rule); padding:9px 11px}
+.simple-table tr:last-child td{border-bottom:none}
+
+/* ── Flags / pills ─────────────────────────────────────────── */
+.pill{
+  display:inline-flex; align-items:center; gap:5px;
+  font-size:11px; font-weight:650; padding:2px 8px; border-radius:20px;
+  border:1px solid transparent; white-space:nowrap;
+}
+.pill.ok{background:var(--good-wash); color:var(--good-ink); border-color:#cfe4cf}
+.pill.warn{background:var(--warn-wash); color:#8a5f00; border-color:#efdcae}
+.pill.bad{background:var(--critical-wash); color:var(--critical-ink); border-color:#f0cdca}
+
+/* ── Concentration bars ────────────────────────────────────── */
+.conc-row{margin:0 0 18px}
+.conc-row:last-child{margin-bottom:0}
+.conc-head{display:flex; justify-content:space-between; align-items:baseline; margin-bottom:7px}
+.conc-head .t{font-size:13px; font-weight:600}
+.conc-head .v{font-size:19px; font-weight:640; letter-spacing:-.01em; font-variant-numeric:tabular-nums}
+.conc-bar{display:flex; height:26px; border-radius:5px; overflow:hidden; gap:2px; background:var(--surface)}
+.conc-bar i{display:block; height:100%}
+.conc-bar i.top{background:var(--fmt-flagship)}
+.conc-bar i.rest{background:var(--neutral-mark)}
+.conc-foot{display:flex; justify-content:space-between; margin-top:6px; font-size:11.5px; color:var(--ink-2)}
+
+/* ── Observations ──────────────────────────────────────────── */
+.obs{display:grid; gap:16px}
+.obs article{
+  background:var(--surface); border:1px solid var(--rule); border-left:3px solid var(--fmt-flagship);
+  border-radius:8px; box-shadow:var(--shadow); padding:18px 22px;
+}
+.obs article.sev-warn{border-left-color:var(--warning)}
+.obs article.sev-bad{border-left-color:var(--critical)}
+.obs article.sev-good{border-left-color:var(--good)}
+.obs h3{margin:0 0 2px; font-size:15px; font-weight:650; letter-spacing:-.01em}
+.obs .kicker{
+  font-size:10.5px; letter-spacing:.1em; text-transform:uppercase;
+  font-weight:700; color:var(--muted); margin:0 0 6px;
+}
+.obs .body{margin:0; color:var(--ink-2); font-size:13.5px; max-width:96ch}
+.obs .body b{color:var(--ink); font-weight:640; font-variant-numeric:tabular-nums}
+.obs .ask{
+  margin:11px 0 0; padding-top:10px; border-top:1px solid var(--rule);
+  font-size:13px; color:var(--ink);
+}
+.obs .ask span{
+  font-weight:700; font-size:10.5px; letter-spacing:.1em; text-transform:uppercase;
+  color:var(--muted); margin-right:8px;
+}
+
+footer.foot{
+  margin-top:38px; padding-top:16px; border-top:1px solid var(--rule);
+  font-size:11.5px; color:var(--muted); display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap;
+}
+
+/* ── Print / board pack ────────────────────────────────────── */
+@page{size:A4 landscape; margin:12mm}
+@media print{
+  html,body{background:#fff}
+  .wrap{max-width:none; padding:0}
+  .controls, #loading{display:none !important}
+  .masthead, .card, .kpi, .obs article, .panel{
+    box-shadow:none; border-color:#d6d5ce; break-inside:avoid; page-break-inside:avoid;
+  }
+  .section-head{break-after:avoid; page-break-after:avoid; margin-top:20px}
+  .card, .obs article, .kpi{break-inside:avoid}
+  .tablewrap{overflow:visible; border-color:#d6d5ce}
+  thead th{position:static; background:#efeeea !important; -webkit-print-color-adjust:exact; print-color-adjust:exact}
+  tbody tr.best td, tbody tr.flagged td{-webkit-print-color-adjust:exact; print-color-adjust:exact}
+  table{font-size:9.5px}
+  tbody td, thead th{padding:5px 6px}
+  body{font-size:12px}
+  #report.stale{opacity:1}
+  /* the 17-column table must fit the page width, not scroll off it */
+  #outlet-table{font-size:8px; table-layout:auto}
+  #outlet-table td, #outlet-table th{padding:3px 4px}
+  #outlet-table th{white-space:normal; letter-spacing:0; text-transform:none; font-size:8px}
+  #outlet-table th .arrow{display:none}
+  #outlet-table td.txt{white-space:normal}
+  #outlet-table .swatch{width:6px; height:6px}
+  .masthead{padding:16px 20px}
+  .masthead h1{font-size:22px}
+  .masthead .sub{font-size:14px}
+  .masthead .meta{margin-top:9px; font-size:10.5px}
+  .kpis{grid-template-columns:repeat(5,minmax(0,1fr)); gap:9px; margin-top:12px}
+  .kpi{padding:10px 12px}
+  .kpi .label{font-size:8.5px; letter-spacing:.05em}
+  .kpi .value{font-size:17px}
+  .kpi .value.small{font-size:15px}
+  .kpi .sub, .kpi .breakdown{font-size:9px}
+  /* shrink the plots so a card fits one landscape page instead of leaving a gap */
+  .chartbox{height:230px !important}
+  .chartbox.tall{height:290px !important}
+  .section-head{margin:14px 0 8px}
+  .section-head h2{font-size:15px}
+  .section-head p{font-size:11px}
+  .card{padding:12px 14px}
+  .card h3{font-size:12.5px}
+  .card .note{font-size:10.5px; margin-bottom:9px}
+  .legend{font-size:10.5px; margin-bottom:8px}
+  .obs article{padding:13px 16px}
+  .obs h3{font-size:13px}
+  .obs .body{font-size:11.5px}
+  .obs .ask{font-size:11px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- 1 ── TITLE BLOCK ─────────────────────────────────────── -->
+  <header class="masthead">
+    <div class="identity">
+      <p class="eyebrow" id="m-eyebrow">Board pack — management information</p>
+      <h1 id="m-company">Nusa Kopi Group Sdn Bhd</h1>
+      <p class="sub">Outlet contribution analysis</p>
+      <div class="meta">
+        <span>Financial year <b id="m-fy">—</b></span>
+        <span>Currency <b id="m-ccy">—</b></span>
+        <span>Source <b id="m-source">Outlet P&amp;L tab, live</b></span>
+        <span>Outlets <b id="m-count">—</b></span>
+      </div>
+    </div>
+    <div class="controls">
+      <button id="refresh" type="button" aria-live="polite">
+        <span class="spin" aria-hidden="true"></span><span class="txt">Refresh data</span>
+      </button>
+      <div class="stamp">Last updated <b id="m-updated">never</b></div>
+    </div>
+  </header>
+
+  <div id="states"></div>
+  <div id="loading">Contacting Google Sheets…</div>
+
+  <main id="report" hidden></main>
+
+  <footer class="foot">
+    <span>Direct outlet economics before head office overhead, depreciation and finance costs.</span>
+    <span id="foot-src">—</span>
+  </footer>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script>
+"use strict";
+/* ═══════════════════════════════════════════════════════════════════════════
+   1. CONFIGURATION — change the sheet here and nowhere else
+   ═══════════════════════════════════════════════════════════════════════════
+   From a share link of the shape
+     https://docs.google.com/spreadsheets/d/<SHEET_ID>/edit?gid=<TAB_GID>#gid=<TAB_GID>
+   the long token between /d/ and /edit is SHEET_ID, and the number after
+   gid= is TAB_GID (the numeric id of the "Outlet P&L" tab — the tab id shown
+   in the URL while that tab is selected, NOT its position).
+   ═════════════════════════════════════════════════════════════════════════ */
+
+const SHEET_ID = "PASTE_SHEET_ID_HERE";   // e.g. "1AbC…xyz"  (between /d/ and /edit)
+const TAB_GID  = "PASTE_TAB_GID_HERE";    // e.g. "1234567890" (the gid= number)
+const TAB_NAME = "Outlet P&L";            // used only if TAB_GID is left unset
+
+/* Presentation constants */
+const COMPANY            = "Nusa Kopi Group Sdn Bhd";
+const CURRENCY_CODE      = "RM";
+const CURRENCY_LONG      = "Ringgit Malaysia (RM)";
+const FY_LABEL_FALLBACK  = "Year ended 31 December 2025";
+const LOCALE             = "en-MY";
+
+/* Analytical thresholds */
+const CONTRIBUTION_FLAG_PCT = 34.0;   // outlets below this are flagged red
+const OCCUPANCY_FLAG_PCT    = 10.0;   // occupancy above this % of revenue is flagged
+const CONCENTRATION_TOP_N   = 3;      // "top N" used in the concentration section
+
+/* Header detection: the tab carries title rows above the real header, so the
+   header row is located by content, never by position. */
+const HEADER_ANCHOR_A = "outlet";
+const HEADER_ANCHOR_B = "net revenue";
+
+/* Column labels expected on the header row (matched case/space-insensitively,
+   with a positional fallback if a label does not survive the round trip). */
+const COLUMNS = [
+  { key:"code",      label:"Code",               kind:"text",  pos:0  },
+  { key:"outlet",    label:"Outlet",             kind:"text",  pos:1  },
+  { key:"location",  label:"Location",           kind:"text",  pos:2  },
+  { key:"format",    label:"Format",             kind:"text",  pos:3  },
+  { key:"opened",    label:"Opened",             kind:"date",  pos:4  },
+  { key:"sqft",      label:"Sq ft",              kind:"num",   pos:5  },
+  { key:"seats",     label:"Seats",              kind:"num",   pos:6  },
+  { key:"revenue",   label:"Net revenue",        kind:"money", pos:7  },
+  { key:"cos",       label:"Cost of sales",      kind:"money", pos:8  },
+  { key:"gp",        label:"Gross profit",       kind:"money", pos:9  },
+  { key:"gpPct",     label:"GP %",               kind:"pct",   pos:10 },
+  { key:"payroll",   label:"Outlet payroll",     kind:"money", pos:11 },
+  { key:"occupancy", label:"Occupancy",          kind:"money", pos:12 },
+  { key:"selling",   label:"Selling costs",      kind:"money", pos:13 },
+  { key:"contrib",   label:"Outlet contribution",kind:"money", pos:14 },
+  { key:"contribPct",label:"Contribution %",     kind:"pct",   pos:15 },
+  { key:"revPsf",    label:"Revenue per sq ft",  kind:"money", pos:16 }
+];
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   2. FORMATTING
+   ═══════════════════════════════════════════════════════════════════════════ */
+const nf0 = new Intl.NumberFormat(LOCALE, { minimumFractionDigits:0, maximumFractionDigits:0 });
+const nf1 = new Intl.NumberFormat(LOCALE, { minimumFractionDigits:1, maximumFractionDigits:1 });
+const nf2 = new Intl.NumberFormat(LOCALE, { minimumFractionDigits:2, maximumFractionDigits:2 });
+
+const money  = n => (n == null || !isFinite(n)) ? "—" : CURRENCY_CODE + " " + nf0.format(Math.round(n));
+const money2 = n => (n == null || !isFinite(n)) ? "—" : CURRENCY_CODE + " " + nf2.format(n);
+const pct1   = n => (n == null || !isFinite(n)) ? "—" : nf1.format(n) + "%";
+const int0   = n => (n == null || !isFinite(n)) ? "—" : nf0.format(n);
+const moneyK = n => (n == null || !isFinite(n)) ? "—"
+                  : Math.abs(n) >= 1e6 ? CURRENCY_CODE + " " + nf2.format(n/1e6) + "m"
+                  : CURRENCY_CODE + " " + nf0.format(Math.round(n));
+const dateLong = d => !(d instanceof Date) || isNaN(d) ? "—"
+  : d.toLocaleDateString("en-GB", { day:"2-digit", month:"short", year:"numeric" });
+const dateShort = d => !(d instanceof Date) || isNaN(d) ? "—"
+  : d.toLocaleDateString("en-GB", { month:"short", year:"numeric" });
+const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c =>
+  ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[c]));
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   3. TRANSPORT — JSONP against the gviz endpoint
+      A script tag, not fetch: no API key, no server, no Google Cloud project.
+      Works on any sheet shared "anyone with the link can view".
+   ═══════════════════════════════════════════════════════════════════════════ */
+const GVIZ_TIMEOUT_MS = 20000;
+let jsonpSeq = 0;
+
+function isConfigured() {
+  return SHEET_ID && !/^PASTE_/.test(SHEET_ID);
+}
+
+/* Optional override so the file can be pointed at a sheet without editing it:
+   dashboard.html?sheet=<full share link or bare id>&gid=<gid> */
+function resolveTarget() {
+  const q = new URLSearchParams(location.search);
+  let id = SHEET_ID, gid = TAB_GID;
+  const s = q.get("sheet");
+  if (s) {
+    const m = s.match(/\/spreadsheets\/d\/([a-zA-Z0-9-_]+)/);
+    id = m ? m[1] : s.trim();
+    const g = s.match(/[?#&]gid=([0-9]+)/);
+    if (g) gid = g[1];
+  }
+  if (q.get("gid")) gid = q.get("gid");
+  const gidClean = (gid && !/^PASTE_/.test(gid)) ? String(gid).trim() : "";
+  return { id: (id || "").trim(), gid: gidClean, configured: !!id && !/^PASTE_/.test(id) };
+}
+
+function buildUrl(target, callbackName) {
+  const base = "https://docs.google.com/spreadsheets/d/" + encodeURIComponent(target.id) + "/gviz/tq";
+  const p = new URLSearchParams();
+  // headers=0 => gviz returns every physical row as data, so the four title
+  // rows arrive intact and we can locate the real header ourselves.
+  p.set("headers", "0");
+  p.set("tqx", "out:json;responseHandler:" + callbackName);
+  if (target.gid) p.set("gid", target.gid);
+  else p.set("sheet", TAB_NAME);
+  p.set("_cb", String(Date.now()));   // defeat the browser cache on Refresh
+  return base + "?" + p.toString();
+}
+
+function loadSheet(target) {
+  return new Promise((resolve, reject) => {
+    const cb = "__nusaKopiGviz" + (++jsonpSeq);
+    const script = document.createElement("script");
+    let done = false;
+
+    const cleanup = () => {
+      clearTimeout(timer);
+      delete window[cb];
+      if (script.parentNode) script.parentNode.removeChild(script);
+    };
+    const timer = setTimeout(() => {
+      if (done) return;
+      done = true; cleanup();
+      reject(new GvizError("timeout",
+        "Google did not answer within " + (GVIZ_TIMEOUT_MS/1000) + " seconds."));
+    }, GVIZ_TIMEOUT_MS);
+
+    window[cb] = payload => {
+      if (done) return;
+      done = true; cleanup();
+      resolve(payload);
+    };
+    script.onerror = () => {
+      if (done) return;
+      done = true; cleanup();
+      // A blocked script tag is indistinguishable from a 404 by design, and by
+      // far the most common cause is sharing, so say so.
+      reject(new GvizError("network",
+        "The browser could not load the sheet. Google returns an error page " +
+        "(not data) when the file is not shared publicly, when the sheet id is " +
+        "wrong, or when the tab id does not exist."));
+    };
+
+    script.src = buildUrl(target, cb);
+    script.async = true;
+    document.head.appendChild(script);
+  });
+}
+
+class GvizError extends Error {
+  constructor(kind, message, detail) { super(message); this.kind = kind; this.detail = detail || ""; }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   4. PARSING — the tab has four title rows above the real header
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* gviz encodes dates as the string "Date(y,m,d)"; the month is 0-based. */
+function toDate(v) {
+  if (v instanceof Date) return v;
+  if (typeof v === "string") {
+    const m = v.match(/^Date\((\d+),(\d+),(\d+)(?:,(\d+),(\d+),(\d+))?\)$/);
+    if (m) return new Date(+m[1], +m[2], +m[3], +(m[4]||0), +(m[5]||0), +(m[6]||0));
+    const iso = v.match(/^(\d{4})-(\d{2})-(\d{2})/);
+    if (iso) return new Date(+iso[1], +iso[2]-1, +iso[3]);
+    const d = new Date(v);
+    if (!isNaN(d)) return d;
+  }
+  return null;
+}
+
+/* Read a cell as display text, whichever way gviz typed the column. */
+function cellText(c) {
+  if (c == null) return "";
+  if (c.f != null && String(c.f).trim() !== "") return String(c.f).trim();
+  if (c.v == null) return "";
+  if (c.v instanceof Date) return c.v.toISOString().slice(0,10);
+  if (typeof c.v === "string" && /^Date\(/.test(c.v)) {
+    const d = toDate(c.v);
+    return d ? d.toISOString().slice(0,10) : c.v;
+  }
+  return String(c.v).trim();
+}
+
+/* Read a cell as a number, tolerating "RM 1,234.50", "35.1%" and "(123)". */
+function cellNum(c) {
+  if (c == null) return null;
+  if (typeof c.v === "number") return c.v;
+  const raw = (c.v != null ? c.v : c.f);
+  if (raw == null) return null;
+  let s = String(raw).trim();
+  if (s === "" || s === "-" || s === "—") return null;
+  const neg = /^\(.*\)$/.test(s);
+  const isPct = /%\s*$/.test(s);
+  s = s.replace(/[()]/g, "").replace(/[^0-9.\-]/g, "");
+  if (s === "" || s === "-" || s === ".") return null;
+  let n = parseFloat(s);
+  if (!isFinite(n)) return null;
+  if (isPct) n = n / 100;
+  return neg ? -Math.abs(n) : n;
+}
+
+/* Percent columns arrive as a fraction (0.351) when the cell is percent-
+   formatted, or as 35.1 when it is a plain number. Normalise to 0–100. */
+function asPct(c) {
+  const n = cellNum(c);
+  if (n == null) return null;
+  return Math.abs(n) <= 1.5 ? n * 100 : n;
+}
+
+const norm = s => String(s == null ? "" : s).toLowerCase().replace(/[\s ]+/g, " ").trim();
+
+function parseTable(payload) {
+  if (!payload) throw new GvizError("empty", "Google returned an empty response.");
+  if (payload.status === "error") {
+    const e = (payload.errors && payload.errors[0]) || {};
+    const reason = e.reason || "";
+    if (/access_denied|user_not_authenticated/i.test(reason)) {
+      throw new GvizError("sharing",
+        "Google refused the request because the sheet is not readable without signing in.",
+        [e.message, e.detailed_message].filter(Boolean).join(" — "));
+    }
+    if (/invalid_query|not_found|bad_request/i.test(reason)) {
+      throw new GvizError("target",
+        "Google accepted the request but could not find that sheet or tab.",
+        [e.message, e.detailed_message].filter(Boolean).join(" — "));
+    }
+    throw new GvizError("gviz", "Google returned an error.",
+      [reason, e.message, e.detailed_message].filter(Boolean).join(" — "));
+  }
+  const table = payload.table;
+  if (!table || !Array.isArray(table.rows) || table.rows.length === 0) {
+    throw new GvizError("empty", "The tab came back with no rows in it.");
+  }
+
+  const grid = table.rows.map(r => (r && r.c) ? r.c : []);
+  const width = Math.max(table.cols ? table.cols.length : 0,
+                         ...grid.map(r => r.length));
+
+  /* ── Locate the header row by content ── */
+  const texts = grid.map(r => {
+    const out = [];
+    for (let i = 0; i < width; i++) out.push(norm(cellText(r[i])));
+    return out;
+  });
+
+  let headerIdx = texts.findIndex(row =>
+    row.includes(HEADER_ANCHOR_A) && row.includes(HEADER_ANCHOR_B));
+
+  const numericRun = i => {
+    const next = grid[i+1];
+    if (!next) return 0;
+    let nums = 0;
+    for (let j = 0; j < width; j++) if (typeof cellNum(next[j]) === "number") nums++;
+    return nums;
+  };
+
+  if (headerIdx < 0) {
+    // Fallback: gviz types a mixed column as a number and drops the label text
+    // in it, so "Net revenue" can go missing. Accept "Outlet" plus either
+    // several other known labels or a row of numbers directly beneath.
+    const wanted = COLUMNS.map(c => norm(c.label));
+    headerIdx = texts.findIndex((row, i) => {
+      if (!row.includes(HEADER_ANCHOR_A)) return false;
+      return row.filter(v => v && wanted.includes(v)).length >= 3 || numericRun(i) >= 6;
+    });
+  }
+  if (headerIdx < 0) {
+    // Last resort: a run of text labels immediately above a run of numbers.
+    headerIdx = texts.findIndex((row, i) =>
+      row.filter(Boolean).length >= 3 && numericRun(i) >= 6);
+  }
+  if (headerIdx < 0) {
+    const preview = texts.slice(0, 8).map((r,i) => "row " + (i+1) + ": " + r.filter(Boolean).slice(0,6).join(" | "));
+    throw new GvizError("header",
+      'Could not find the header row. It is identified by a row containing both "' +
+      HEADER_ANCHOR_A + '" and "' + HEADER_ANCHOR_B + '".',
+      preview.join("\n"));
+  }
+
+  /* ── Map every wanted column onto a physical column index ── */
+  const headerTexts = texts[headerIdx];
+  const used = new Set();
+  const idx = {};
+  COLUMNS.forEach(col => {
+    const want = norm(col.label);
+    let at = headerTexts.findIndex((h, i) => h === want && !used.has(i));
+    if (at < 0) at = headerTexts.findIndex((h, i) => h && !used.has(i) &&
+      (h.startsWith(want) || want.startsWith(h)));
+    if (at < 0 && col.pos < width && !used.has(col.pos) && !headerTexts[col.pos]) at = col.pos;
+    if (at >= 0) { idx[col.key] = at; used.add(at); }
+    else idx[col.key] = -1;
+  });
+  if (idx.code < 0 && idx.outlet >= 0) idx.code = Math.max(0, idx.outlet - 1);
+
+  const at = (row, key) => idx[key] >= 0 ? row[idx[key]] : null;
+
+  /* ── Read the outlet rows, stopping short of the total and the
+        reconciliation block below it (both have no outlet code) ── */
+  const outlets = [];
+  for (let r = headerIdx + 1; r < grid.length; r++) {
+    const row = grid[r];
+    if (!row || row.length === 0) continue;
+    const code = cellText(at(row, "code"));
+    const name = cellText(at(row, "outlet"));
+    const revenue = cellNum(at(row, "revenue"));
+    if (!code) continue;                                   // total + reconciliation
+    if (/^total\b/i.test(code) || /^total\b/i.test(name)) continue;
+    if (revenue == null || !(revenue > 0)) continue;
+
+    const o = {
+      code, outlet: name,
+      location: cellText(at(row, "location")),
+      format:   cellText(at(row, "format")) || "Unclassified",
+      opened:   toDate(at(row,"opened") ? (at(row,"opened").v != null ? at(row,"opened").v : at(row,"opened").f) : null),
+      sqft:      cellNum(at(row, "sqft")),
+      seats:     cellNum(at(row, "seats")),
+      revenue,
+      cos:       cellNum(at(row, "cos")),
+      gp:        cellNum(at(row, "gp")),
+      gpPct:     asPct(at(row, "gpPct")),
+      payroll:   cellNum(at(row, "payroll")),
+      occupancy: cellNum(at(row, "occupancy")),
+      selling:   cellNum(at(row, "selling")),
+      contrib:   cellNum(at(row, "contrib")),
+      contribPct:asPct(at(row, "contribPct")),
+      revPsf:    cellNum(at(row, "revPsf"))
+    };
+
+    // Derive anything the tab did not carry, and always derive the
+    // cost ratios, which are needed as a % of each outlet's own revenue.
+    if (o.gp == null && o.cos != null) o.gp = o.revenue - o.cos;
+    if (o.contrib == null) o.contrib = (o.gp || 0) - (o.payroll || 0) - (o.occupancy || 0) - (o.selling || 0);
+    if (o.gpPct == null && o.gp != null) o.gpPct = o.gp / o.revenue * 100;
+    if (o.contribPct == null) o.contribPct = o.contrib / o.revenue * 100;
+    if (o.revPsf == null && o.sqft) o.revPsf = o.revenue / o.sqft;
+
+    o.cosPct     = o.cos       != null ? o.cos / o.revenue * 100 : null;
+    o.payrollPct = o.payroll   != null ? o.payroll / o.revenue * 100 : null;
+    o.occPct     = o.occupancy != null ? o.occupancy / o.revenue * 100 : null;
+    o.sellingPct = o.selling   != null ? o.selling / o.revenue * 100 : null;
+    o.revPseat   = o.seats ? o.revenue / o.seats : null;
+
+    outlets.push(o);
+  }
+
+  if (outlets.length === 0) {
+    throw new GvizError("empty",
+      "The header row was found on row " + (headerIdx + 1) +
+      ", but no outlet rows with a code and a positive net revenue followed it.");
+  }
+
+  /* Financial year label, taken from the title rows if it is stated there. */
+  let fy = "";
+  for (let r = 0; r < headerIdx; r++) {
+    // read the raw text, not the lowercased copy used for matching
+    const line = (grid[r] || []).map(cellText).filter(Boolean).join(" ");
+    const m = line.match(/(year ended[^—|]*)/i) || line.match(/\b(fy\s?20\d\d)\b/i);
+    if (m) { fy = m[1].trim().replace(/^\w/, ch => ch.toUpperCase()); break; }
+  }
+
+  return { outlets, headerRow: headerIdx + 1, fy: fy || FY_LABEL_FALLBACK };
+}
+</script>
+
+<script>
+"use strict";
+/* ═══════════════════════════════════════════════════════════════════════════
+   5. ANALYTICS
+   ═══════════════════════════════════════════════════════════════════════════ */
+const sum = (a, f) => a.reduce((t, x) => t + (f(x) || 0), 0);
+const mean = (a, f) => a.length ? sum(a, f) / a.length : null;
+const byDesc = f => (x, y) => (f(y) ?? -Infinity) - (f(x) ?? -Infinity);
+const FORMAT_ORDER = ["Flagship", "Standard", "Kiosk"];
+const FORMAT_COLOR = { Flagship:"#2a78d6", Standard:"#eb6834", Kiosk:"#1baf7a" };
+const FALLBACK_COLOR = "#4a3aa7";
+const fmtColor = f => FORMAT_COLOR[f] || FALLBACK_COLOR;
+const fmtSlug  = f => String(f || "").toLowerCase().replace(/[^a-z0-9]+/g, "-");
+
+function analyse(data) {
+  const o = data.outlets;
+  const revenue   = sum(o, x => x.revenue);
+  const contrib   = sum(o, x => x.contrib);
+  const sqft      = sum(o, x => x.sqft);
+  const seats     = sum(o, x => x.seats);
+  const cos       = sum(o, x => x.cos);
+  const payroll   = sum(o, x => x.payroll);
+  const occupancy = sum(o, x => x.occupancy);
+  const selling   = sum(o, x => x.selling);
+
+  const formats = [];
+  const seen = new Map();
+  o.forEach(x => {
+    if (!seen.has(x.format)) seen.set(x.format, []);
+    seen.get(x.format).push(x);
+  });
+  const order = [...FORMAT_ORDER.filter(f => seen.has(f)),
+                 ...[...seen.keys()].filter(f => !FORMAT_ORDER.includes(f))];
+  order.forEach(name => {
+    const rs = seen.get(name);
+    const r = sum(rs, x => x.revenue), c = sum(rs, x => x.contrib);
+    const s = sum(rs, x => x.sqft), t = sum(rs, x => x.seats);
+    formats.push({
+      name, count: rs.length, outlets: rs,
+      revenue: r, contrib: c, sqft: s, seats: t,
+      avgContribPct: mean(rs, x => x.contribPct),
+      wtdContribPct: r ? c / r * 100 : null,
+      revPsf:  s ? r / s : null,
+      revPseat: t ? r / t : null,
+      occPct:  r ? sum(rs, x => x.occupancy) / r * 100 : null,
+      sellingPct: r ? sum(rs, x => x.selling) / r * 100 : null,
+      payrollPct: r ? sum(rs, x => x.payroll) / r * 100 : null,
+      cosPct: r ? sum(rs, x => x.cos) / r * 100 : null,
+      revShare: revenue ? r / revenue * 100 : null
+    });
+  });
+
+  const byContrib = [...o].sort(byDesc(x => x.contribPct));
+  const byRevenue = [...o].sort(byDesc(x => x.revenue));
+  const byContribAbs = [...o].sort(byDesc(x => x.contrib));
+  const byPsf = [...o].sort(byDesc(x => x.revPsf));
+
+  const n = Math.min(CONCENTRATION_TOP_N, o.length);
+  const topRev = byRevenue.slice(0, n);
+  const topCon = byContribAbs.slice(0, n);
+
+  return {
+    outlets: o, headerRow: data.headerRow, fy: data.fy,
+    count: o.length,
+    revenue, contrib, sqft, seats, cos, payroll, occupancy, selling,
+    contribPct: revenue ? contrib / revenue * 100 : null,
+    avgContribPct: mean(o, x => x.contribPct),
+    revPsf:  sqft ? revenue / sqft : null,
+    revPseat: seats ? revenue / seats : null,
+    cosPct: revenue ? cos / revenue * 100 : null,
+    payrollPct: revenue ? payroll / revenue * 100 : null,
+    occPct: revenue ? occupancy / revenue * 100 : null,
+    sellingPct: revenue ? selling / revenue * 100 : null,
+    formats,
+    byContrib, byRevenue, byContribAbs, byPsf,
+    best: byContrib[0],
+    worst: byContrib[byContrib.length - 1],
+    flagged: o.filter(x => x.contribPct != null && x.contribPct < CONTRIBUTION_FLAG_PCT),
+    occFlagged: o.filter(x => x.occPct != null && x.occPct > OCCUPANCY_FLAG_PCT),
+    conc: {
+      n,
+      codes: topRev.map(x => x.code),
+      contribCodes: topCon.map(x => x.code),
+      revShare: revenue ? sum(topRev, x => x.revenue) / revenue * 100 : null,
+      conShare: contrib ? sum(topCon, x => x.contrib) / contrib * 100 : null,
+      revAmount: sum(topRev, x => x.revenue),
+      conAmount: sum(topCon, x => x.contrib)
+    }
+  };
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   6. CHART PLUMBING
+   ═══════════════════════════════════════════════════════════════════════════ */
+const CHARTS = new Map();
+function mountChart(id, config) {
+  const prev = CHARTS.get(id);
+  if (prev) { prev.destroy(); CHARTS.delete(id); }   // never stack canvases
+  const el = document.getElementById(id);
+  if (!el) return null;
+  const c = new Chart(el.getContext("2d"), config);
+  CHARTS.set(id, c);
+  return c;
+}
+function destroyAllCharts() {
+  CHARTS.forEach(c => c.destroy());
+  CHARTS.clear();
+}
+
+const INK = "#0b0b0b", INK2 = "#52514e", MUTED = "#898781";
+const GRID = "#ebeae4", AXIS = "#c3c2b7", SURFACE = "#ffffff";
+const CRITICAL = "#d03b3b", NEUTRAL = "#c9c8c1";
+
+Chart.defaults.font.family = 'system-ui, -apple-system, "Segoe UI", Roboto, sans-serif';
+Chart.defaults.font.size = 11.5;
+Chart.defaults.color = INK2;
+Chart.defaults.devicePixelRatio = Math.max(2, window.devicePixelRatio || 1);
+Chart.defaults.animation = { duration: 320 };
+Chart.defaults.maintainAspectRatio = false;
+
+const TOOLTIP = {
+  backgroundColor:"#101010", titleColor:"#ffffff", bodyColor:"#e8e8e4",
+  borderColor:"rgba(255,255,255,.14)", borderWidth:1,
+  padding:{ top:9, right:12, bottom:9, left:12 }, cornerRadius:6,
+  displayColors:true, boxWidth:9, boxHeight:9, boxPadding:5,
+  titleFont:{ size:12, weight:"600" }, bodyFont:{ size:12 }
+};
+
+/* Reference line: options.plugins.refLine = {value, axis:'x'|'y', label} */
+const refLinePlugin = {
+  id: "refLine",
+  afterDatasetsDraw(chart, _args, opts) {
+    if (!opts) return;
+    const lines = Array.isArray(opts.lines) ? opts.lines : [opts];
+    lines.forEach(o => drawRef(chart, o));
+  }
+};
+function drawRef(chart, opts) {
+    if (!opts || opts.value == null || !isFinite(opts.value)) return;
+    const { ctx, chartArea:a, scales } = chart;
+    const axis = opts.axis === "y" ? "y" : "x";
+    const scale = scales[axis];
+    if (!scale) return;
+    const p = scale.getPixelForValue(opts.value);
+    if (!isFinite(p)) return;
+    ctx.save();
+    ctx.strokeStyle = opts.color || "#6f6e69";
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    if (axis === "x") { ctx.moveTo(p, a.top); ctx.lineTo(p, a.bottom); }
+    else              { ctx.moveTo(a.left, p); ctx.lineTo(a.right, p); }
+    ctx.stroke();
+    if (opts.label) {
+      ctx.font = '600 10.5px system-ui, -apple-system, "Segoe UI", sans-serif';
+      const w = ctx.measureText(opts.label).width;
+      let x, y;
+      if (axis === "x") {
+        x = Math.min(Math.max(p - w/2 - 6, a.left), a.right - w - 12);
+        y = a.top - 2;
+      } else {
+        x = a.right - w - 12; y = p - 15;
+      }
+      ctx.fillStyle = SURFACE;
+      ctx.fillRect(x, y - 10, w + 12, 16);
+      ctx.fillStyle = opts.color || "#6f6e69";
+      ctx.fillText(opts.label, x + 6, y + 2);
+    }
+    ctx.restore();
+}
+
+/* Direct labels at the end of horizontal bars */
+const barEndLabels = {
+  id: "barEndLabels",
+  afterDatasetsDraw(chart, _args, opts) {
+    if (!opts || !opts.text) return;
+    const meta = chart.getDatasetMeta(opts.dataset || 0);
+    if (!meta || meta.hidden) return;
+    const { ctx, chartArea:a } = chart;
+    ctx.save();
+    ctx.font = '600 10.5px system-ui, -apple-system, "Segoe UI", sans-serif';
+    ctx.textBaseline = "middle";
+    meta.data.forEach((bar, i) => {
+      const t = opts.text(i);
+      if (!t) return;
+      const w = ctx.measureText(t).width;
+      const base = bar.base != null ? bar.base : a.left;
+      const negative = bar.x < base;
+      const fits = Math.abs(bar.x - base) > w + 18;   // only label inside when it fits
+      ctx.textAlign = fits ? (negative ? "left" : "right") : (negative ? "right" : "left");
+      ctx.fillStyle = fits ? "#ffffff" : INK2;
+      const dx = fits ? (negative ? 9 : -9) : (negative ? -8 : 8);
+      ctx.fillText(t, bar.x + dx, bar.y);
+    });
+    ctx.restore();
+  }
+};
+
+/* Point labels for scatter plots */
+const pointLabels = {
+  id: "pointLabels",
+  afterDatasetsDraw(chart, _args, opts) {
+    if (!opts || !opts.enabled) return;
+    const { ctx, chartArea:a } = chart;
+    ctx.save();
+    ctx.font = '600 10px system-ui, -apple-system, "Segoe UI", sans-serif';
+    ctx.textBaseline = "middle";
+    const placed = [];
+    chart.data.datasets.forEach((ds, di) => {
+      const meta = chart.getDatasetMeta(di);
+      if (meta.hidden) return;
+      meta.data.forEach((pt, i) => {
+        const label = ds.data[i] && ds.data[i].label;
+        if (!label) return;
+        const w = ctx.measureText(label).width;
+        // try right, then left, then above, then below
+        const spots = [
+          { x: pt.x + 9,     y: pt.y,      align:"left"  },
+          { x: pt.x - 9,     y: pt.y,      align:"right" },
+          { x: pt.x,         y: pt.y - 13, align:"center"},
+          { x: pt.x,         y: pt.y + 13, align:"center"}
+        ];
+        let chosen = null;
+        for (const s of spots) {
+          const x0 = s.align === "left" ? s.x : s.align === "right" ? s.x - w : s.x - w/2;
+          const box = { x0, x1: x0 + w, y0: s.y - 6, y1: s.y + 6 };
+          if (box.x0 < a.left + 2 || box.x1 > a.right - 2) continue;
+          if (box.y0 < a.top + 2 || box.y1 > a.bottom - 2) continue;
+          if (placed.some(p => !(box.x1 < p.x0 - 2 || box.x0 > p.x1 + 2 ||
+                                 box.y1 < p.y0 - 2 || box.y0 > p.y1 + 2))) continue;
+          chosen = { s, box }; break;
+        }
+        if (!chosen) return;
+        placed.push(chosen.box);
+        ctx.textAlign = chosen.s.align;
+        ctx.fillStyle = SURFACE;   // 2px surface halo keeps the code legible
+        ctx.lineWidth = 3; ctx.strokeStyle = SURFACE;
+        ctx.strokeText(label, chosen.s.x, chosen.s.y);
+        ctx.fillStyle = INK;
+        ctx.fillText(label, chosen.s.x, chosen.s.y);
+      });
+    });
+    ctx.restore();
+  }
+};
+
+Chart.register(refLinePlugin, barEndLabels, pointLabels);
+
+const gridX = { grid:{ color:GRID, drawTicks:false }, border:{ color:AXIS, display:true },
+                ticks:{ color:MUTED, padding:6 } };
+const catY  = { grid:{ display:false }, border:{ color:AXIS },
+                ticks:{ color:INK2, font:{ size:11.5, weight:"500" }, padding:6 } };
+</script>
+
+<script>
+"use strict";
+/* ═══════════════════════════════════════════════════════════════════════════
+   7. LAYOUT
+   ═══════════════════════════════════════════════════════════════════════════ */
+function sectionHead(n, title, note) {
+  return '<div class="section-head"><span class="n">' + n + '</span>' +
+         '<h2>' + esc(title) + '</h2>' +
+         (note ? '<p>' + note + '</p>' : '') + '</div>';
+}
+function formatLegend(a) {
+  return '<div class="legend">' + a.formats.map(f =>
+    '<span><i class="swatch" style="background:' + fmtColor(f.name) + '"></i>' +
+    esc(f.name) + ' (' + f.count + ')</span>').join("") + '</div>';
+}
+
+function buildReport(a) {
+  const rowH = 26, chartH = n => Math.max(240, n * rowH + 66);
+
+  return [
+
+  /* ── 2. PORTFOLIO KPIs ───────────────────────────────────── */
+  '<div class="kpis">',
+    kpi("Total net revenue", money(a.revenue),
+        int0(a.count) + " trading outlets"),
+    kpi("Total outlet contribution", money(a.contrib),
+        "Before head office, depreciation and finance costs"),
+    kpi("Average contribution %", pct1(a.contribPct),
+        "Revenue-weighted · simple mean " + pct1(a.avgContribPct)),
+    kpi("Revenue per sq ft", money(a.revPsf),
+        int0(a.sqft) + " sq ft across the estate"),
+    '<div class="kpi"><span class="label">Outlets by format</span>' +
+      '<span class="value">' + int0(a.count) + '</span>' +
+      '<span class="breakdown">' + a.formats.map(f =>
+        '<span><i class="swatch sw-' + fmtSlug(f.name) + '" style="background:' +
+        fmtColor(f.name) + '"></i>' + int0(f.count) + ' ' + esc(f.name) + '</span>').join("") +
+      '</span></div>',
+  '</div>',
+
+  /* ── 3. CONTRIBUTION RANKING ─────────────────────────────── */
+  sectionHead("03", "Contribution ranking",
+    "Every outlet by contribution as a percentage of its own net revenue, best to worst. " +
+    "The rule marks the portfolio average of <b>" + pct1(a.contribPct) + "</b>."),
+  '<div class="card">',
+    formatLegend(a),
+    '<div class="chartbox tall" style="height:' + chartH(a.count) + 'px"><canvas id="c-rank"></canvas></div>',
+    a.flagged.length
+      ? '<p class="note" style="margin:12px 0 0">⚠ ' + a.flagged.length + ' outlet' +
+        (a.flagged.length > 1 ? "s" : "") + ' below the ' + pct1(CONTRIBUTION_FLAG_PCT) +
+        ' board threshold: ' + a.flagged.map(o => esc(o.code)).join(", ") + '.</p>'
+      : '<p class="note" style="margin:12px 0 0">No outlet falls below the ' +
+        pct1(CONTRIBUTION_FLAG_PCT) + ' board threshold. The spread from best to worst is ' +
+        pct1(a.best.contribPct - a.worst.contribPct) + ' points.</p>',
+  '</div>',
+  '<div class="card" style="margin-top:18px">',
+    '<h3>Variance from the portfolio average</h3>' +
+      '<p class="note">The same ranking on an expanded scale, in basis points either side of ' +
+      pct1(a.contribPct) + '. The bars above are drawn from zero and are therefore ' +
+      'almost indistinguishable &mdash; which is itself the finding.</p>',
+    '<div class="chartbox tall" style="height:' + chartH(a.count) + 'px"><canvas id="c-rank-var"></canvas></div>',
+  '</div>',
+
+  /* ── 4 & 7. PRODUCTIVITY + OCCUPANCY ─────────────────────── */
+  sectionHead("04", "Space productivity and occupancy burden",
+    "Whether the space earns its rent, and what the rent costs as a share of what the space earns."),
+  '<div class="grid g2">',
+    '<div class="card"><h3>Revenue per sq ft</h3>' +
+      '<p class="note">Sorted. Estate average ' + money(a.revPsf) + ' per sq ft.</p>' +
+      '<div class="chartbox" style="height:320px"><canvas id="c-psf"></canvas></div></div>',
+    '<div class="card"><h3>Occupancy cost as a % of revenue</h3>' +
+      '<p class="note">Flagged above ' + pct1(OCCUPANCY_FLAG_PCT) +
+      ', the level at which rent starts dictating the P&amp;L.</p>' +
+      '<div class="chartbox" style="height:320px"><canvas id="c-occ"></canvas></div>' +
+      (a.occFlagged.length
+        ? '<p class="note" style="margin:12px 0 0"><span class="pill bad">⚠ ' +
+          a.occFlagged.length + ' above ' + pct1(OCCUPANCY_FLAG_PCT) + '</span> ' +
+          a.occFlagged.map(o => esc(o.code) + " " + pct1(o.occPct)).join(", ") + '</p>'
+        : '<p class="note" style="margin:12px 0 0"><span class="pill ok">✓ none above ' +
+          pct1(OCCUPANCY_FLAG_PCT) + '</span> Range ' +
+          pct1(Math.min(...a.outlets.map(o => o.occPct))) + ' to ' +
+          pct1(Math.max(...a.outlets.map(o => o.occPct))) + ' of revenue.</p>') +
+    '</div>',
+  '</div>',
+
+  /* ── 5. PRODUCTIVITY VS PROFITABILITY ────────────────────── */
+  sectionHead("05", "Productivity against profitability",
+    "Revenue per sq ft on the horizontal, contribution % on the vertical. " +
+    "Busy but unprofitable sits bottom-right; small but efficient sits top-left."),
+  '<div class="card">',
+    formatLegend(a),
+    '<div class="chartbox" style="height:440px"><canvas id="c-scatter"></canvas></div>',
+    '<p class="note" style="margin:14px 0 0">Quadrants split on the estate average, ' +
+      money(a.revPsf) + ' per sq ft and ' + pct1(a.contribPct) + ' contribution.</p>',
+  '</div>',
+
+  /* ── 6. COST STRUCTURE ───────────────────────────────────── */
+  sectionHead("06", "Cost structure by outlet",
+    "Each cost line as a percentage of that outlet's own revenue, so it is clear " +
+    "<i>where</i> margin is lost, not only that it was lost. Sorted by contribution, best at the top."),
+  '<div class="card">',
+    '<div class="legend">' +
+      '<span><i class="swatch" style="background:var(--cost-1)"></i>Cost of sales</span>' +
+      '<span><i class="swatch" style="background:var(--cost-2)"></i>Outlet payroll</span>' +
+      '<span><i class="swatch" style="background:var(--cost-3)"></i>Occupancy</span>' +
+      '<span><i class="swatch" style="background:var(--cost-4)"></i>Selling costs</span>' +
+      '<span><i class="swatch" style="background:var(--neutral-mark)"></i>Outlet contribution</span>' +
+    '</div>',
+    '<div class="chartbox tall" style="height:' + chartH(a.count) + 'px"><canvas id="c-cost"></canvas></div>',
+    '<p class="note" style="margin:14px 0 0">Portfolio: cost of sales ' + pct1(a.cosPct) +
+      ', payroll ' + pct1(a.payrollPct) + ', occupancy ' + pct1(a.occPct) +
+      ', selling ' + pct1(a.sellingPct) + ', contribution ' + pct1(a.contribPct) + '.</p>',
+  '</div>',
+
+  /* ── 8. FORMAT COMPARISON ────────────────────────────────── */
+  sectionHead("08", "Format comparison",
+    "Flagship against Standard against Kiosk. Three measures of different scale, " +
+    "so three charts rather than one crowded axis."),
+  '<div class="grid g3">',
+    '<div class="card"><h3>Average contribution %</h3><p class="note">Mean across the outlets in each format.</p>' +
+      '<div class="chartbox" style="height:230px"><canvas id="c-fmt-contrib"></canvas></div></div>',
+    '<div class="card"><h3>Revenue per sq ft</h3><p class="note">Format revenue over format floor area.</p>' +
+      '<div class="chartbox" style="height:230px"><canvas id="c-fmt-psf"></canvas></div></div>',
+    '<div class="card"><h3>Revenue per seat</h3><p class="note">Format revenue over format seat count.</p>' +
+      '<div class="chartbox" style="height:230px"><canvas id="c-fmt-seat"></canvas></div></div>',
+  '</div>',
+  '<div class="card" style="margin-top:18px"><div class="tablewrap" style="border:none">' +
+    '<table class="simple-table"><thead><tr>' +
+      '<th class="txt">Format</th><th>Outlets</th><th>Net revenue</th><th>Share of revenue</th>' +
+      '<th>Avg contribution %</th><th>Revenue / sq ft</th><th>Revenue / seat</th>' +
+      '<th>Occupancy % of rev.</th><th>Selling % of rev.</th>' +
+    '</tr></thead><tbody>' +
+    a.formats.map(f => '<tr>' +
+      '<td class="txt"><span class="code-cell"><i class="swatch" style="background:' + fmtColor(f.name) + '"></i>' +
+        esc(f.name) + '</span></td>' +
+      '<td>' + int0(f.count) + '</td>' +
+      '<td>' + money(f.revenue) + '</td>' +
+      '<td>' + pct1(f.revShare) + '</td>' +
+      '<td>' + pct1(f.avgContribPct) + '</td>' +
+      '<td>' + money(f.revPsf) + '</td>' +
+      '<td>' + money(f.revPseat) + '</td>' +
+      '<td>' + pct1(f.occPct) + '</td>' +
+      '<td>' + pct1(f.sellingPct) + '</td>' +
+    '</tr>').join("") +
+    '</tbody></table></div></div>',
+
+  /* ── 9. MATURITY ─────────────────────────────────────────── */
+  sectionHead("09", "Maturity",
+    "Contribution % against opening date. A downward drift to the right would say the " +
+    "newer outlets are still ramping."),
+  '<div class="card">',
+    formatLegend(a),
+    '<div class="chartbox" style="height:360px"><canvas id="c-maturity"></canvas></div>',
+  '</div>',
+
+  /* ── 10. CONCENTRATION RISK ──────────────────────────────── */
+  sectionHead("10", "Concentration risk",
+    "How much of the estate rests on its largest " + a.conc.n + " outlets."),
+  '<div class="grid g2">',
+    '<div class="card">' + concRow(
+        "Share of net revenue from the top " + a.conc.n,
+        a.conc.revShare, a.conc.codes, money(a.conc.revAmount), money(a.revenue)) +
+      concRow(
+        "Share of outlet contribution from the top " + a.conc.n,
+        a.conc.conShare, a.conc.contribCodes, money(a.conc.conAmount), money(a.contrib)) +
+    '</div>',
+    '<div class="card"><h3>Read-across</h3>' +
+      '<p class="note">' + concNarrative(a) + '</p>' +
+      '<div class="tablewrap" style="border:none"><table class="simple-table"><thead><tr>' +
+        '<th class="txt">Outlet</th><th>Revenue</th><th>% est.</th>' +
+        '<th>Contribution</th><th>% est.</th></tr></thead><tbody>' +
+      a.byRevenue.slice(0, a.conc.n).map(o => '<tr>' +
+        '<td class="txt wrap"><span class="code-cell"><i class="swatch" style="background:' + fmtColor(o.format) + '"></i>' +
+          '<b>' + esc(o.code) + '</b> ' + esc(o.outlet) + '</span></td>' +
+        '<td>' + money(o.revenue) + '</td>' +
+        '<td>' + pct1(o.revenue / a.revenue * 100) + '</td>' +
+        '<td>' + money(o.contrib) + '</td>' +
+        '<td>' + pct1(o.contrib / a.contrib * 100) + '</td>' +
+      '</tr>').join("") +
+      '</tbody></table></div></div>',
+  '</div>',
+
+  /* ── 11. FULL OUTLET TABLE ───────────────────────────────── */
+  sectionHead("11", "Full outlet table",
+    "Every column from the tab, scrolling sideways on a narrow screen. Click a column heading to sort. " +
+    "Outlets below " + pct1(CONTRIBUTION_FLAG_PCT) + " contribution are flagged red; " +
+    "the strongest performer is highlighted."),
+  '<div class="card"><div class="tablewrap"><table id="outlet-table">' +
+    '<thead><tr id="outlet-head"></tr></thead><tbody id="outlet-body"></tbody></table></div>' +
+    '<p class="note" style="margin:14px 0 0">' +
+      '<span class="pill ok">★ strongest</span> ' + esc(a.best.code) + ' at ' + pct1(a.best.contribPct) +
+      ' &nbsp; ' +
+      (a.flagged.length
+        ? '<span class="pill bad">⚠ below ' + pct1(CONTRIBUTION_FLAG_PCT) + '</span> ' +
+          a.flagged.map(o => esc(o.code)).join(", ")
+        : '<span class="pill ok">✓ none below ' + pct1(CONTRIBUTION_FLAG_PCT) + '</span> ' +
+          'weakest is ' + esc(a.worst.code) + ' at ' + pct1(a.worst.contribPct)) +
+    '</p></div>',
+
+  /* ── 12. CFO OBSERVATIONS ────────────────────────────────── */
+  sectionHead("12", "CFO observations",
+    "Findings drawn only from the Outlet P&amp;L tab, with the figures that evidence them " +
+    "and the question each puts to management."),
+  '<div class="obs">' + observations(a).map((o, i) =>
+    '<article class="sev-' + o.sev + '">' +
+      '<p class="kicker">Observation ' + (i + 1) + '</p>' +
+      '<h3>' + o.title + '</h3>' +
+      '<p class="body">' + o.body + '</p>' +
+      '<p class="ask"><span>Question to management</span>' + o.ask + '</p>' +
+    '</article>').join("") + '</div>'
+
+  ].join("");
+}
+
+function kpi(label, value, sub, small) {
+  return '<div class="kpi"><span class="label">' + esc(label) + '</span>' +
+         '<span class="value' + (small ? " small" : "") + ' num">' + esc(value) + '</span>' +
+         '<span class="sub">' + sub + '</span></div>';
+}
+
+function concRow(title, share, codes, amount, total) {
+  const s = Math.max(0, Math.min(100, share || 0));
+  return '<div class="conc-row">' +
+    '<div class="conc-head"><span class="t">' + esc(title) + '</span>' +
+      '<span class="v">' + pct1(share) + '</span></div>' +
+    '<div class="conc-bar">' +
+      '<i class="top" style="width:' + s.toFixed(2) + '%"></i>' +
+      '<i class="rest" style="width:' + (100 - s).toFixed(2) + '%"></i>' +
+    '</div>' +
+    '<div class="conc-foot"><span>' + codes.map(esc).join(" · ") + ' — ' + amount + '</span>' +
+      '<span>Estate ' + total + '</span></div>' +
+  '</div>';
+}
+
+function concNarrative(a) {
+  const top = a.byRevenue.slice(0, a.conc.n);
+  const sameFormat = top.every(o => o.format === top[0].format);
+  const cities = [...new Set(top.map(o => (o.location || "").split(",").pop().trim()).filter(Boolean))];
+  const parts = [];
+  parts.push("The largest " + a.conc.n + " outlets carry " + pct1(a.conc.revShare) +
+    " of net revenue and " + pct1(a.conc.conShare) + " of outlet contribution, " +
+    (a.conc.conShare > a.conc.revShare
+      ? "so they are slightly over-represented in profit relative to their size."
+      : "so they are no more profitable, proportionally, than the rest of the estate."));
+  if (sameFormat) parts.push("All " + a.conc.n + " are " + esc(top[0].format) + " sites.");
+  if (cities.length === 1) parts.push("All " + a.conc.n + " sit in " + esc(cities[0]) + ".");
+  return parts.join(" ");
+}
+</script>
+
+<script>
+"use strict";
+/* ═══════════════════════════════════════════════════════════════════════════
+   8. CHARTS
+   ═══════════════════════════════════════════════════════════════════════════ */
+function drawCharts(a) {
+  const ranked = a.byContrib;                    // best → worst
+  const codes  = ranked.map(o => o.code);
+  const label  = o => o.code + " · " + o.outlet;
+
+  /* ── 3a. Contribution ranking, drawn from zero ─────────── */
+  mountChart("c-rank", {
+    type: "bar",
+    data: { labels: codes, datasets: [{
+      label: "Contribution %",
+      data: ranked.map(o => o.contribPct),
+      backgroundColor: ranked.map(o => fmtColor(o.format)),
+      borderRadius: { topLeft:0, bottomLeft:0, topRight:4, bottomRight:4 },
+      borderSkipped: false, barPercentage: .74, categoryPercentage: .9
+    }]},
+    options: {
+      indexAxis: "y",
+      layout:{ padding:{ top:14, right:14 } },
+      scales: {
+        x: Object.assign({}, gridX, { beginAtZero:true, suggestedMax: Math.ceil(Math.max(...ranked.map(o=>o.contribPct))/5)*5,
+             ticks:{ color:MUTED, padding:6, callback:v => v + "%" } }),
+        y: catY
+      },
+      plugins: {
+        legend:{ display:false },
+        tooltip: Object.assign({}, TOOLTIP, { callbacks:{
+          title: items => label(ranked[items[0].dataIndex]),
+          label: item => {
+            const o = ranked[item.dataIndex];
+            return ["Contribution  " + pct1(o.contribPct),
+                    "Contribution  " + money(o.contrib),
+                    "Net revenue   " + money(o.revenue),
+                    "Format        " + o.format];
+          }
+        }}),
+        refLine: { value: a.contribPct, axis:"x", label:"Average " + pct1(a.contribPct) },
+        barEndLabels: { text: i => pct1(ranked[i].contribPct) }
+      }
+    }
+  });
+
+  /* ── 3b. Variance from the portfolio average, in bp ────── */
+  const bp = ranked.map(o => (o.contribPct - a.contribPct) * 100);
+  mountChart("c-rank-var", {
+    type: "bar",
+    data: { labels: codes, datasets: [{
+      label: "Basis points vs average",
+      data: bp,
+      backgroundColor: bp.map(v => v >= 0 ? "#2a78d6" : "#e34948"),
+      borderRadius: 4, borderSkipped: false, barPercentage: .74, categoryPercentage: .9
+    }]},
+    options: {
+      indexAxis: "y",
+      layout:{ padding:{ top:8, right:22, left:22 } },
+      scales: {
+        x: Object.assign({}, gridX, { grid:{ color: c => c.tick.value === 0 ? AXIS : GRID, drawTicks:false },
+             ticks:{ color:MUTED, padding:6, callback: v => (v > 0 ? "+" : "") + v + " bp" } }),
+        y: catY
+      },
+      plugins: {
+        legend:{ display:false },
+        tooltip: Object.assign({}, TOOLTIP, { callbacks:{
+          title: items => label(ranked[items[0].dataIndex]),
+          label: item => {
+            const o = ranked[item.dataIndex];
+            const d = (o.contribPct - a.contribPct) * 100;
+            return [(d >= 0 ? "+" : "") + nf0.format(Math.round(d)) + " bp vs average",
+                    "Contribution " + pct1(o.contribPct)];
+          }
+        }}),
+        barEndLabels: { text: i => (bp[i] >= 0 ? "+" : "") + nf0.format(Math.round(bp[i])) }
+      }
+    }
+  });
+
+  /* ── 4. Revenue per sq ft ──────────────────────────────── */
+  const psf = a.byPsf;
+  mountChart("c-psf", {
+    type: "bar",
+    data: { labels: psf.map(o => o.code), datasets: [{
+      label: "Revenue per sq ft",
+      data: psf.map(o => o.revPsf),
+      backgroundColor: "#2a78d6",
+      borderRadius: { topLeft:4, topRight:4 }, borderSkipped: false,
+      barPercentage: .72, categoryPercentage: .88
+    }]},
+    options: {
+      layout:{ padding:{ top:18 } },
+      scales: {
+        y: Object.assign({}, gridX, { beginAtZero:true,
+             ticks:{ color:MUTED, padding:6, callback: v => nf0.format(v) } }),
+        x: { grid:{ display:false }, border:{ color:AXIS },
+             ticks:{ color:INK2, font:{ size:11, weight:"500" } } }
+      },
+      plugins: {
+        legend:{ display:false },
+        tooltip: Object.assign({}, TOOLTIP, { callbacks:{
+          title: items => label(psf[items[0].dataIndex]),
+          label: item => {
+            const o = psf[item.dataIndex];
+            return [money2(o.revPsf) + " per sq ft",
+                    int0(o.sqft) + " sq ft · " + o.format,
+                    "Net revenue " + money(o.revenue)];
+          }
+        }}),
+        refLine: { value: a.revPsf, axis:"y", label:"Estate " + money(a.revPsf) }
+      }
+    }
+  });
+
+  /* ── 7. Occupancy burden ───────────────────────────────── */
+  const occ = [...a.outlets].sort(byDesc(o => o.occPct));
+  const occOver = o => o.occPct != null && o.occPct > OCCUPANCY_FLAG_PCT;
+  mountChart("c-occ", {
+    type: "bar",
+    data: { labels: occ.map(o => (occOver(o) ? "⚠ " : "") + o.code), datasets: [{
+      label: "Occupancy % of revenue",
+      data: occ.map(o => o.occPct),
+      backgroundColor: occ.map(o => occOver(o) ? CRITICAL : "#2a78d6"),
+      borderRadius: { topLeft:4, topRight:4 }, borderSkipped: false,
+      barPercentage: .72, categoryPercentage: .88
+    }]},
+    options: {
+      layout:{ padding:{ top:18 } },
+      scales: {
+        y: Object.assign({}, gridX, { beginAtZero:true,
+             suggestedMax: Math.max(OCCUPANCY_FLAG_PCT + 2, ...occ.map(o => o.occPct)) ,
+             ticks:{ color:MUTED, padding:6, callback: v => v + "%" } }),
+        x: { grid:{ display:false }, border:{ color:AXIS },
+             ticks:{ color:INK2, font:{ size:11, weight:"500" } } }
+      },
+      plugins: {
+        legend:{ display:false },
+        tooltip: Object.assign({}, TOOLTIP, { callbacks:{
+          title: items => label(occ[items[0].dataIndex]),
+          label: item => {
+            const o = occ[item.dataIndex];
+            return [pct1(o.occPct) + " of net revenue",
+                    "Occupancy " + money(o.occupancy),
+                    occOver(o) ? "⚠ above the " + pct1(OCCUPANCY_FLAG_PCT) + " threshold"
+                               : "Within the " + pct1(OCCUPANCY_FLAG_PCT) + " threshold"];
+          }
+        }}),
+        refLine: { value: OCCUPANCY_FLAG_PCT, axis:"y", color: CRITICAL,
+                   label: pct1(OCCUPANCY_FLAG_PCT) + " threshold" }
+      }
+    }
+  });
+
+  /* ── 5. Productivity against profitability ─────────────── */
+  mountChart("c-scatter", {
+    type: "scatter",
+    data: { datasets: a.formats.map(f => ({
+      label: f.name,
+      data: f.outlets.map(o => ({ x:o.revPsf, y:o.contribPct, label:o.code, o })),
+      backgroundColor: fmtColor(f.name),
+      borderColor: SURFACE, borderWidth: 2,           // 2px surface ring
+      pointRadius: 7, pointHoverRadius: 10, hitRadius: 14
+    }))},
+    options: {
+      layout:{ padding:{ top:16, right:18, left:6 } },
+      scales: {
+        x: Object.assign({}, gridX, {
+          title:{ display:true, text:"Revenue per sq ft (" + CURRENCY_CODE + ")", color:INK2,
+                  font:{ size:11.5, weight:"600" }, padding:{ top:8 } },
+          ticks:{ color:MUTED, padding:6, callback: v => nf0.format(v) } }),
+        y: Object.assign({}, gridX, {
+          title:{ display:true, text:"Contribution % of revenue", color:INK2,
+                  font:{ size:11.5, weight:"600" }, padding:{ bottom:8 } },
+          ticks:{ color:MUTED, padding:6, callback: v => nf1.format(v) + "%" } })
+      },
+      plugins: {
+        legend:{ display:false },
+        tooltip: Object.assign({}, TOOLTIP, { callbacks:{
+          title: items => label(items[0].raw.o),
+          label: item => {
+            const o = item.raw.o;
+            return [money2(o.revPsf) + " per sq ft",
+                    pct1(o.contribPct) + " contribution",
+                    o.format + " · " + int0(o.sqft) + " sq ft · " + int0(o.seats) + " seats",
+                    o.location];
+          }
+        }}),
+        pointLabels: { enabled: true },
+        refLine: { lines: [
+          { value: a.revPsf,     axis:"x", label:"Estate " + money(a.revPsf) + "/sq ft" },
+          { value: a.contribPct, axis:"y", label:"Average " + pct1(a.contribPct) }
+        ]}
+      }
+    }
+  });
+
+  /* ── 6. Cost structure ─────────────────────────────────── */
+  const cost = [
+    { key:"cosPct",     label:"Cost of sales",       color:"#2a78d6" },
+    { key:"payrollPct", label:"Outlet payroll",      color:"#eb6834" },
+    { key:"occPct",     label:"Occupancy",           color:"#1baf7a" },
+    { key:"sellingPct", label:"Selling costs",       color:"#eda100" },
+    { key:"contribPct", label:"Outlet contribution", color:NEUTRAL   }
+  ];
+  mountChart("c-cost", {
+    type: "bar",
+    data: { labels: codes, datasets: cost.map(c => ({
+      label: c.label,
+      data: ranked.map(o => o[c.key]),
+      backgroundColor: c.color,
+      borderColor: SURFACE, borderWidth: 1,           // 2px gap between fills
+      barPercentage: .78, categoryPercentage: .9
+    }))},
+    options: {
+      indexAxis: "y",
+      layout:{ padding:{ right:14 } },
+      scales: {
+        x: Object.assign({}, gridX, { stacked:true, min:0, max:100,
+             ticks:{ color:MUTED, padding:6, stepSize:10, callback: v => v + "%" } }),
+        y: Object.assign({}, catY, { stacked:true })
+      },
+      plugins: {
+        legend:{ display:false },
+        tooltip: Object.assign({}, TOOLTIP, { callbacks:{
+          title: items => label(ranked[items[0].dataIndex]),
+          label: item => {
+            const o = ranked[item.dataIndex];
+            const c = cost[item.datasetIndex];
+            const abs = { cosPct:"cos", payrollPct:"payroll", occPct:"occupancy",
+                          sellingPct:"selling", contribPct:"contrib" }[c.key];
+            return c.label + "  " + pct1(o[c.key]) + "   (" + money(o[abs]) + ")";
+          }
+        }})
+      }
+    }
+  });
+
+  /* ── 8. Format comparison, three separate scales ───────── */
+  const fmtBar = (id, valueOf, tickFmt, tipFmt) => mountChart(id, {
+    type: "bar",
+    data: { labels: a.formats.map(f => f.name), datasets: [{
+      data: a.formats.map(valueOf),
+      backgroundColor: a.formats.map(f => fmtColor(f.name)),
+      borderRadius: { topLeft:4, topRight:4 }, borderSkipped: false,
+      barPercentage: .6, categoryPercentage: .8
+    }]},
+    options: {
+      layout:{ padding:{ top:14 } },
+      scales: {
+        y: Object.assign({}, gridX, { beginAtZero:true,
+             ticks:{ color:MUTED, padding:6, callback: tickFmt } }),
+        x: { grid:{ display:false }, border:{ color:AXIS },
+             ticks:{ color:INK2, font:{ size:11.5, weight:"500" } } }
+      },
+      plugins: {
+        legend:{ display:false },
+        tooltip: Object.assign({}, TOOLTIP, { callbacks:{
+          title: items => a.formats[items[0].dataIndex].name + " (" +
+                           a.formats[items[0].dataIndex].count + " outlets)",
+          label: item => tipFmt(a.formats[item.dataIndex])
+        }})
+      }
+    }
+  });
+  fmtBar("c-fmt-contrib", f => f.avgContribPct, v => nf1.format(v) + "%",
+         f => ["Average " + pct1(f.avgContribPct), "Revenue-weighted " + pct1(f.wtdContribPct)]);
+  fmtBar("c-fmt-psf",  f => f.revPsf,  v => nf0.format(v),
+         f => [money2(f.revPsf) + " per sq ft", int0(f.sqft) + " sq ft"]);
+  fmtBar("c-fmt-seat", f => f.revPseat, v => nf0.format(v),
+         f => [money(f.revPseat) + " per seat", int0(f.seats) + " seats"]);
+
+  /* ── 9. Maturity ───────────────────────────────────────── */
+  mountChart("c-maturity", {
+    type: "scatter",
+    data: { datasets: a.formats.map(f => ({
+      label: f.name,
+      data: f.outlets.filter(o => o.opened instanceof Date && !isNaN(o.opened))
+             .map(o => ({ x:o.opened.getTime(), y:o.contribPct, label:o.code, o })),
+      backgroundColor: fmtColor(f.name),
+      borderColor: SURFACE, borderWidth: 2,
+      pointRadius: 7, pointHoverRadius: 10, hitRadius: 14
+    }))},
+    options: {
+      layout:{ padding:{ top:16, right:18 } },
+      scales: {
+        x: Object.assign({}, gridX, {
+          type:"linear",
+          title:{ display:true, text:"Opening date", color:INK2,
+                  font:{ size:11.5, weight:"600" }, padding:{ top:8 } },
+          ticks:{ color:MUTED, padding:6, maxRotation:0, autoSkipPadding:24,
+                  callback: v => dateShort(new Date(v)) } }),
+        y: Object.assign({}, gridX, {
+          title:{ display:true, text:"Contribution % of revenue", color:INK2,
+                  font:{ size:11.5, weight:"600" }, padding:{ bottom:8 } },
+          ticks:{ color:MUTED, padding:6, callback: v => nf1.format(v) + "%" } })
+      },
+      plugins: {
+        legend:{ display:false },
+        tooltip: Object.assign({}, TOOLTIP, { callbacks:{
+          title: items => label(items[0].raw.o),
+          label: item => {
+            const o = item.raw.o;
+            return ["Opened " + dateLong(o.opened),
+                    pct1(o.contribPct) + " contribution",
+                    money(o.revenue) + " net revenue",
+                    o.format];
+          }
+        }}),
+        pointLabels: { enabled: true },
+        refLine: { lines: [{ value: a.contribPct, axis:"y",
+                             label:"Average " + pct1(a.contribPct) }] }
+      }
+    }
+  });
+}
+</script>
+
+<script>
+"use strict";
+/* ═══════════════════════════════════════════════════════════════════════════
+   9. FULL OUTLET TABLE — every column from the tab, sortable
+   ═══════════════════════════════════════════════════════════════════════════ */
+const TABLE_COLS = [
+  { key:"code",       label:"Code",                text:true,  fmt:o => o.code },
+  { key:"outlet",     label:"Outlet",              text:true,  fmt:o => o.outlet },
+  { key:"location",   label:"Location",            text:true,  fmt:o => o.location },
+  { key:"format",     label:"Format",              text:true,  fmt:o => o.format },
+  { key:"opened",     label:"Opened",              text:true,  fmt:o => dateLong(o.opened),
+                                                   val:o => o.opened ? o.opened.getTime() : null },
+  { key:"sqft",       label:"Sq ft",               fmt:o => int0(o.sqft) },
+  { key:"seats",      label:"Seats",               fmt:o => int0(o.seats) },
+  { key:"revenue",    label:"Net revenue",         fmt:o => money(o.revenue) },
+  { key:"cos",        label:"Cost of sales",       fmt:o => money(o.cos) },
+  { key:"gp",         label:"Gross profit",        fmt:o => money(o.gp) },
+  { key:"gpPct",      label:"GP %",                fmt:o => pct1(o.gpPct) },
+  { key:"payroll",    label:"Outlet payroll",      fmt:o => money(o.payroll) },
+  { key:"occupancy",  label:"Occupancy",           fmt:o => money(o.occupancy) },
+  { key:"selling",    label:"Selling costs",       fmt:o => money(o.selling) },
+  { key:"contrib",    label:"Outlet contribution", fmt:o => money(o.contrib) },
+  { key:"contribPct", label:"Contribution %",      fmt:o => pct1(o.contribPct) },
+  { key:"revPsf",     label:"Revenue per sq ft",   fmt:o => money2(o.revPsf) }
+];
+
+let sortState = { key:"contribPct", dir:-1 };
+
+function renderTable(a) {
+  const head = document.getElementById("outlet-head");
+  const body = document.getElementById("outlet-body");
+  if (!head || !body) return;
+
+  head.innerHTML = TABLE_COLS.map(c => {
+    const on = sortState.key === c.key;
+    return '<th class="' + (c.text ? "txt " : "") + (on ? "sorted" : "") +
+      '" data-key="' + c.key + '" scope="col" role="button" tabindex="0" ' +
+      'aria-sort="' + (on ? (sortState.dir === 1 ? "ascending" : "descending") : "none") + '">' +
+      esc(c.label) + '<span class="arrow">' + (on ? (sortState.dir === 1 ? "▲" : "▼") : "▲") + '</span></th>';
+  }).join("");
+
+  const col = TABLE_COLS.find(c => c.key === sortState.key) || TABLE_COLS[0];
+  const valueOf = o => col.val ? col.val(o) : o[col.key];
+  const rows = [...a.outlets].sort((x, y) => {
+    const vx = valueOf(x), vy = valueOf(y);
+    if (vx == null && vy == null) return 0;
+    if (vx == null) return 1;
+    if (vy == null) return -1;
+    if (typeof vx === "string" || typeof vy === "string")
+      return String(vx).localeCompare(String(vy)) * sortState.dir;
+    return (vx - vy) * sortState.dir;
+  });
+
+  body.innerHTML = rows.map(o => {
+    const flagged = o.contribPct != null && o.contribPct < CONTRIBUTION_FLAG_PCT;
+    const best = o.code === a.best.code;
+    const cls = flagged ? "flagged" : best ? "best" : "";
+    return '<tr class="' + cls + '">' + TABLE_COLS.map(c => {
+      const isCode = c.key === "code";
+      const extra = isCode ? " code" : c.key === "contribPct" ? " contrib" : "";
+      let inner = esc(c.fmt(o));
+      if (isCode) {
+        const mark = best ? '<span class="mark" title="Strongest contribution">★</span>'
+                   : flagged ? '<span class="mark" title="Below ' + pct1(CONTRIBUTION_FLAG_PCT) + '">⚠</span>' : "";
+        inner = '<span class="code-cell">' + mark +
+                '<i class="swatch" style="background:' + fmtColor(o.format) + '"></i>' + inner + '</span>';
+      }
+      return '<td class="' + (c.text ? "txt" : "") + extra + '">' + inner + '</td>';
+    }).join("") + '</tr>';
+  }).join("");
+
+  head.querySelectorAll("th").forEach(th => {
+    const go = () => {
+      const k = th.dataset.key;
+      const isText = (TABLE_COLS.find(c => c.key === k) || {}).text;
+      if (sortState.key === k) sortState.dir *= -1;
+      else sortState = { key:k, dir: isText ? 1 : -1 };
+      renderTable(a);
+    };
+    th.addEventListener("click", go);
+    th.addEventListener("keydown", e => {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); go(); }
+    });
+  });
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   10. CFO OBSERVATIONS — generated from the live figures, so they stay
+       true after a refresh. Nothing here is sourced outside the tab.
+   ═══════════════════════════════════════════════════════════════════════════ */
+const b = s => "<b>" + s + "</b>";
+const listCodes = arr => arr.map(o => b(esc(o.code)) + " " + pct1(o.contribPct)).join(", ");
+
+function fyEnd(a) {
+  const m = String(a.fy).match(/(\d{1,2})\s+([A-Za-z]+)\s+(\d{4})/);
+  if (m) {
+    const d = new Date(m[3] + " " + m[2] + " " + m[1]);
+    if (!isNaN(d)) return d;
+  }
+  const years = a.outlets.map(o => o.opened instanceof Date ? o.opened.getFullYear() : 0);
+  const y = Math.max.apply(null, years.concat([0]));
+  return y ? new Date(y, 11, 31) : null;
+}
+
+function spread(arr, f) {
+  const v = arr.map(f).filter(x => x != null && isFinite(x));
+  return v.length ? { min: Math.min.apply(null, v), max: Math.max.apply(null, v),
+                      range: Math.max.apply(null, v) - Math.min.apply(null, v) } : null;
+}
+
+function observations(a) {
+  const out = [];
+  const o = a.outlets;
+  const conSpread = spread(o, x => x.contribPct);
+  const cosSpread = spread(o, x => x.cosPct);
+  const paySpread = spread(o, x => x.payrollPct);
+  const occSpread = spread(o, x => x.occPct);
+
+  /* ── 1. Dispersion of the cost ratios ─────────────────── */
+  const tight = conSpread && conSpread.range < 2;
+  out.push({
+    sev: tight ? "warn" : "good",
+    title: tight
+      ? "The outlet P&amp;Ls barely differ from one another"
+      : "Contribution varies materially across the estate",
+    body: tight
+      ? "Across " + b(a.count) + " outlets in " + b(a.formats.length) + " formats, contribution runs from " +
+        b(pct1(conSpread.min)) + " (" + esc(a.worst.code) + ") to " + b(pct1(conSpread.max)) + " (" +
+        esc(a.best.code) + ") &mdash; a total spread of " + b(pct1(conSpread.range)) + " points. " +
+        "The cost ratios behind it are tighter still: cost of sales " + b(pct1(cosSpread.min) + "–" + pct1(cosSpread.max)) +
+        " of revenue, payroll " + b(pct1(paySpread.min) + "–" + pct1(paySpread.max)) + ", occupancy " +
+        b(pct1(occSpread.min) + "–" + pct1(occSpread.max)) + ". " +
+        "A " + int0(a.byPsf[a.byPsf.length-1].sqft) + " sq ft site and a " + int0(a.byPsf[0].sqft) +
+        " sq ft site in different states are reporting effectively the same rent-to-sales and wage-to-sales ratios."
+      : "Contribution runs from " + b(pct1(conSpread.min)) + " (" + esc(a.worst.code) + ") to " +
+        b(pct1(conSpread.max)) + " (" + esc(a.best.code) + "), a spread of " + b(pct1(conSpread.range)) +
+        " points, with cost of sales between " + b(pct1(cosSpread.min)) + " and " + b(pct1(cosSpread.max)) +
+        " of revenue and occupancy between " + b(pct1(occSpread.min)) + " and " + b(pct1(occSpread.max)) + ".",
+    ask: tight
+      ? "Are these outlet P&amp;Ls built from cost-centre postings that genuinely differ by site, or are group " +
+        "ratios being allocated down to outlet level? Until that is settled, the ranking below cannot support " +
+        "a close, a renegotiation or a capital decision."
+      : "Which of these gaps is structural &mdash; lease, catchment, format &mdash; and which is executional and can be closed this year?"
+  });
+
+  /* ── 2. The weakest outlets ───────────────────────────── */
+  const bottom = a.byContrib.slice(-Math.min(3, a.count)).reverse();
+  const worst = a.worst;
+  const worstGap = a.contribPct - worst.contribPct;
+  const worstCost = [
+    { n:"cost of sales", v:worst.cosPct - a.cosPct },
+    { n:"payroll",       v:worst.payrollPct - a.payrollPct },
+    { n:"occupancy",     v:worst.occPct - a.occPct },
+    { n:"selling costs", v:worst.sellingPct - a.sellingPct }
+  ].sort((x, y) => y.v - x.v)[0];
+  out.push({
+    sev: "bad",
+    title: "The weakest outlets, and what is actually costing them",
+    body: "The bottom " + bottom.length + " on contribution are " + listCodes(bottom) + ", against a portfolio " +
+      "average of " + b(pct1(a.contribPct)) + ". " +
+      esc(worst.code) + " (" + esc(worst.outlet) + ", " + esc(worst.location) + ") sits " +
+      b(nf0.format(Math.round(worstGap * 100)) + " bp") + " below the average on " + b(money(worst.revenue)) +
+      " of revenue, worth " + b(money(worst.revenue * worstGap / 100)) + " of contribution a year if it merely " +
+      "reached the estate average. Its largest adverse variance is " + b(worstCost.n) + " at " +
+      b(pct1(worst[{ "cost of sales":"cosPct", "payroll":"payrollPct", "occupancy":"occPct", "selling costs":"sellingPct" }[worstCost.n]])) +
+      " of revenue against " + b(pct1(a[{ "cost of sales":"cosPct", "payroll":"payrollPct", "occupancy":"occPct", "selling costs":"sellingPct" }[worstCost.n]])) +
+      " for the portfolio. " +
+      (a.flagged.length === 0
+        ? "Note that the " + pct1(CONTRIBUTION_FLAG_PCT) + " board screen catches nobody: every outlet clears it, " +
+          "so the threshold is not currently discriminating between sites."
+        : b(a.flagged.length) + " outlet" + (a.flagged.length > 1 ? "s" : "") + " fall" +
+          (a.flagged.length > 1 ? "" : "s") + " below the " + pct1(CONTRIBUTION_FLAG_PCT) + " board screen."),
+    ask: "What is the remediation plan and the deadline for " + esc(worst.code) +
+      ", and at what point does the answer become a lease exit rather than a turnaround?"
+  });
+
+  /* ── 3. What the strongest have in common ─────────────── */
+  const topN = Math.min(5, Math.max(3, Math.round(a.count / 3)));
+  const top = a.byContrib.slice(0, topN);
+  const tally = {};
+  top.forEach(x => tally[x.format] = (tally[x.format] || 0) + 1);
+  const domFormat = Object.keys(tally).sort((x, y) => tally[y] - tally[x])[0];
+  const domCount = tally[domFormat];
+  const domInfo = a.formats.find(f => f.name === domFormat);
+  const others = a.formats.filter(f => f.name !== domFormat);
+  const otherRev = sum(others, f => f.revenue);
+  const otherAvg = others.length ? sum(others, f => f.avgContribPct * f.count) / sum(others, f => f.count) : null;
+  const lines = [
+    { n:"cost of sales", k:"cosPct" }, { n:"payroll", k:"payrollPct" },
+    { n:"occupancy", k:"occPct" },     { n:"selling costs", k:"sellingPct" }
+  ].map(l => {
+    const inTop = mean(top, x => x[l.k]);
+    const inRest = mean(a.byContrib.slice(topN), x => x[l.k]);
+    return { n:l.n, k:l.k, top:inTop, rest:inRest, delta:(inRest - inTop) };
+  }).sort((x, y) => Math.abs(y.delta) - Math.abs(x.delta));
+  const driver = lines[0];
+  const sizeTop = mean(top, x => x.sqft), sizeRest = mean(a.byContrib.slice(topN), x => x.sqft);
+  out.push({
+    sev: "good",
+    title: "What the strongest outlets have in common is format, not size or city",
+    body: b(domCount + " of the top " + topN) + " outlets by contribution are " + b(esc(domFormat)) + " sites (" +
+      listCodes(top) + "). " + esc(domFormat) + " averages " + b(pct1(domInfo.avgContribPct)) +
+      " contribution against " + b(pct1(otherAvg)) + " for the rest of the estate. " +
+      "The gap is not gross margin &mdash; GP runs " + b(pct1(spread(o, x => x.gpPct).min) + "–" + pct1(spread(o, x => x.gpPct).max)) +
+      " everywhere. It is " + b(driver.n) + ": " + b(pct1(driver.top)) + " of revenue in the top " + topN +
+      " against " + b(pct1(driver.rest)) + " in the remainder, a " +
+      b(nf0.format(Math.round(Math.abs(driver.delta) * 100)) + " bp") + " difference that accounts for most of the " +
+      b(nf0.format(Math.round((mean(top, x => x.contribPct) - mean(a.byContrib.slice(topN), x => x.contribPct)) * 100)) + " bp") +
+      " contribution gap. Scale is not the explanation: the top " + topN + " average " + b(int0(sizeTop) + " sq ft") +
+      " and the rest " + b(int0(sizeRest) + " sq ft") + ", yet space productivity runs the other way.",
+    ask: "If " + driver.n + " is the whole difference, is it a genuine format effect &mdash; catchment, basket, " +
+      "promotional intensity &mdash; or a difference in how the line is coded between site types? " +
+      "If it is real, what stops us applying the " + esc(domFormat) + " playbook to the other " +
+      (a.count - domInfo.count) + " outlets?"
+  });
+
+  /* ── 4. Space productivity ────────────────────────────── */
+  const bestPsf = a.byPsf[0];
+  const bestPsfFmt = a.formats.find(f => f.name === bestPsf.format);
+  const psfLead = bestPsfFmt.revPsf / a.revPsf;
+  out.push({
+    sev: "warn",
+    title: "The most productive space is the least profitable space",
+    body: b(esc(bestPsf.format)) + " sites turn " + b(money(bestPsfFmt.revPsf) + " per sq ft") + ", " +
+      b(nf1.format(psfLead) + "×") + " the estate average of " + b(money(a.revPsf)) + " &mdash; " +
+      esc(bestPsf.code) + " alone runs at " + b(money(bestPsf.revPsf)) + " per sq ft on " +
+      b(int0(bestPsf.sqft) + " sq ft") + ". On " + b(pct1(bestPsfFmt.sqft / a.sqft * 100)) +
+      " of the estate's floor area the format delivers " + b(pct1(bestPsfFmt.revShare)) + " of revenue. " +
+      "It nonetheless sits " + (bestPsfFmt.avgContribPct < a.avgContribPct
+        ? b(nf0.format(Math.round((a.avgContribPct - bestPsfFmt.avgContribPct) * 100)) + " bp below")
+        : b(nf0.format(Math.round((bestPsfFmt.avgContribPct - a.avgContribPct) * 100)) + " bp above")) +
+      " the estate on contribution, at " + b(pct1(bestPsfFmt.avgContribPct)) + ".",
+    ask: "If a " + esc(bestPsf.format).toLowerCase() + " earns " + nf1.format(psfLead) +
+      "× the revenue per square foot, why does that not convert into contribution &mdash; " +
+      "and what is the capital cost per Ringgit of contribution for a " + esc(bestPsf.format).toLowerCase() +
+      " against a " + esc(a.formats[0].name).toLowerCase() + "? That is the number that should drive the next site."
+  });
+
+  /* ── 5. Maturity and the part-year outlets ────────────── */
+  const dated = o.filter(x => x.opened instanceof Date && !isNaN(x.opened))
+                 .sort((x, y) => y.opened - x.opened);
+  const end = fyEnd(a);
+  if (dated.length) {
+    const newest = dated[0];
+    const mid = dated[Math.floor(dated.length / 2)].opened;
+    const older = dated.filter(x => x.opened <= mid), newer = dated.filter(x => x.opened > mid);
+    const oldAvg = mean(older, x => x.contribPct), newAvg = mean(newer, x => x.contribPct);
+    const fyStart = end ? new Date(end.getFullYear(), 0, 1) : null;
+    const partYear = fyStart && newest.opened > fyStart;
+    const days = partYear ? Math.round((end - newest.opened) / 86400000) + 1 : null;
+    const annual = partYear && days ? newest.revenue * 365 / days : null;
+    const peerFmt = a.formats.find(f => f.name === newest.format);
+    out.push({
+      sev: partYear ? "warn" : "good",
+      title: partYear
+        ? "One outlet traded a part year and is not comparable on this page"
+        : "The newer outlets are not visibly still ramping",
+      body: (partYear
+        ? b(esc(newest.code)) + " (" + esc(newest.outlet) + ") opened " + b(dateLong(newest.opened)) +
+          " and therefore traded roughly " + b(int0(days) + " days") + " of the year. Its " +
+          b(money(newest.revPsf) + " per sq ft") + " is the lowest in the estate and " +
+          b(pct1((1 - newest.revPsf / peerFmt.revPsf) * 100)) + " below the " + esc(newest.format) +
+          " average of " + b(money(peerFmt.revPsf)) + ". Annualised on days traded it would be about " +
+          b(money(annual / newest.sqft) + " per sq ft") + " &mdash; still the " +
+          (annual / newest.sqft < a.revPsf ? "bottom of the estate" : "middle of the estate") +
+          ". Its contribution of " + b(pct1(newest.contribPct)) + " is nevertheless " +
+          (newest.contribPct >= peerFmt.avgContribPct ? "above" : "below") + " its format average of " +
+          b(pct1(peerFmt.avgContribPct)) + ". "
+        : "") +
+        "Across the estate, outlets opened on or before " + b(dateShort(mid)) + " average " +
+        b(pct1(oldAvg)) + " contribution against " + b(pct1(newAvg)) + " for those opened after &mdash; a " +
+        b(nf0.format(Math.round(Math.abs(oldAvg - newAvg) * 100)) + " bp") + " difference. " +
+        (Math.abs(oldAvg - newAvg) < 0.5
+          ? "That is too small to read as a ramp curve; on this data, maturity is not visibly driving contribution."
+          : "That is consistent with newer sites still ramping."),
+      ask: partYear
+        ? "Should " + esc(newest.code) + " be shown annualised, or excluded from the ranking, before the board " +
+          "uses this page to compare sites? And what is its run-rate contribution on the last full quarter?"
+        : "If maturity is not driving contribution, what is the payback assumption in the new-site model, " +
+          "and does the FY2025 evidence support it?"
+    });
+  }
+
+  /* ── 6. Concentration ─────────────────────────────────── */
+  const topRev = a.byRevenue.slice(0, a.conc.n);
+  const cities = {};
+  o.forEach(x => {
+    const city = (x.location || "").split(",").pop().trim() || "Unstated";
+    cities[city] = (cities[city] || 0) + x.revenue;
+  });
+  const biggestCity = Object.keys(cities).sort((x, y) => cities[y] - cities[x])[0];
+  const cityShare = cities[biggestCity] / a.revenue * 100;
+  const cityCount = o.filter(x => (x.location || "").split(",").pop().trim() === biggestCity).length;
+  out.push({
+    sev: cityShare > 40 ? "bad" : "warn",
+    title: "Revenue is concentrated by site and more so by geography",
+    body: "The largest " + a.conc.n + " outlets (" + topRev.map(x => b(esc(x.code))).join(", ") + ") carry " +
+      b(pct1(a.conc.revShare)) + " of net revenue and " + b(pct1(a.conc.conShare)) + " of outlet contribution &mdash; " +
+      b(money(a.conc.conAmount)) + " of the " + b(money(a.contrib)) + " the estate generates before overhead. " +
+      "The sharper exposure is geographic: " + b(int0(cityCount) + " outlets") + " in " + b(esc(biggestCity)) +
+      " account for " + b(pct1(cityShare)) + " of revenue. " +
+      (topRev.every(x => x.format === topRev[0].format)
+        ? "All " + a.conc.n + " of the largest sites are " + esc(topRev[0].format) + " format, so site, format and " +
+          "geography risk are the same risk, not three."
+        : ""),
+    ask: "What is the group's downside if " + esc(topRev[0].code) + " loses its lease at renewal, and " +
+      "how much of the FY2026 new-site pipeline is outside " + esc(biggestCity) + "?"
+  });
+
+  return out;
+}
+</script>
+
+<script>
+"use strict";
+/* ═══════════════════════════════════════════════════════════════════════════
+   11. CONTROLLER — load, refresh, and never leave a blank page
+   ═══════════════════════════════════════════════════════════════════════════ */
+const $ = id => document.getElementById(id);
+let busy = false;
+let lastGood = null;
+
+function setBusy(on) {
+  busy = on;
+  const btn = $("refresh");
+  btn.disabled = on;
+  btn.classList.toggle("loading", on);
+  btn.querySelector(".txt").textContent = on ? "Refreshing…" : "Refresh data";
+  const rep = $("report");
+  if (lastGood) rep.classList.toggle("stale", on);   // hold the old render, no skeleton flash
+}
+
+function clearStates() { $("states").innerHTML = ""; }
+
+function showSetup() {
+  $("loading").hidden = true;
+  $("states").innerHTML =
+    '<div class="panel setup"><span class="tag">Not configured yet</span>' +
+    '<h2>Point this file at your Google Sheet</h2>' +
+    '<p>Open this file in a text editor and set the two constants at the top of the script. ' +
+    'From a share link of the shape</p>' +
+    '<p><code>https://docs.google.com/spreadsheets/d/<b>SHEET_ID</b>/edit?gid=<b>TAB_GID</b></code></p>' +
+    '<ul>' +
+      '<li><code>SHEET_ID</code> — the long token between <code>/d/</code> and <code>/edit</code>.</li>' +
+      '<li><code>TAB_GID</code> — the number after <code>gid=</code> while the <b>Outlet P&amp;L</b> tab is selected. ' +
+        'Leave it as it is and the file will fall back to looking the tab up by name (<code>' + esc(TAB_NAME) + '</code>).</li>' +
+      '<li>The sheet must be shared <b>Anyone with the link — Viewer</b>.</li>' +
+    '</ul>' +
+    '<p style="margin-top:12px">You can also try it without editing the file by appending ' +
+    '<code>?sheet=&lt;paste the share link&gt;</code> to this page&rsquo;s address.</p></div>';
+}
+
+function showError(err) {
+  $("loading").hidden = true;
+  const kind = (err && err.kind) || "unknown";
+  const causes = {
+    sharing: [
+      "The sheet is not shared publicly. In Google Sheets: <b>Share → General access → Anyone with the link → Viewer</b>. A sheet shared only with named people cannot be read by this page.",
+      "The link you took the id from may point to a copy you own but have not shared."
+    ],
+    network: [
+      "<b>The sheet is not shared publicly</b> — this is the usual cause. In Google Sheets: <b>Share → General access → Anyone with the link → Viewer</b>.",
+      "The sheet id in <code>SHEET_ID</code> is wrong, or the file has been deleted or moved to a different Drive.",
+      "The tab id in <code>TAB_GID</code> does not exist on that sheet — check the <code>gid=</code> number while the <b>Outlet P&amp;L</b> tab is open.",
+      "You are offline, or a network policy is blocking <code>docs.google.com</code>."
+    ],
+    target: [
+      "The sheet id is right but the tab is not — check <code>TAB_GID</code> against the <code>gid=</code> number shown while the <b>Outlet P&amp;L</b> tab is selected.",
+      "The tab may have been renamed, in which case update <code>TAB_NAME</code> too."
+    ],
+    timeout: [
+      "Google did not respond. Try Refresh; if it keeps failing, check that the sheet is still shared and reachable."
+    ],
+    header: [
+      "The tab was read, but no row in it contains both <b>Outlet</b> and <b>Net revenue</b>.",
+      "Check that <code>TAB_GID</code> points at the <b>Outlet P&amp;L</b> tab and not another one, and that the header labels have not been renamed."
+    ],
+    empty: [
+      "The tab was reached but no outlet rows were found below the header. Rows are only read when they carry an outlet code and a positive net revenue, which is what keeps the total and the reconciliation block out."
+    ]
+  }[kind] || ["An unexpected problem occurred while reading the sheet."];
+
+  $("states").innerHTML =
+    '<div class="panel error"><span class="tag">Could not load the sheet</span>' +
+    '<h2>' + esc(err && err.message ? err.message : "The sheet could not be read.") + '</h2>' +
+    '<p>Most likely one of these:</p><ul>' + causes.map(c => "<li>" + c + "</li>").join("") + '</ul>' +
+    (err && err.detail ? '<p style="margin-top:12px"><code>' + esc(err.detail) + '</code></p>' : "") +
+    '<p style="margin-top:12px">Nothing on this page is cached from Google, so ' +
+    (lastGood ? "the figures below are from the last successful load at " +
+       esc(lastGood.stamp) + " and are not being updated."
+              : "there is nothing to show until the sheet can be read.") +
+    '</p></div>';
+}
+
+function stampNow() {
+  const d = new Date();
+  return d.toLocaleString("en-GB", {
+    day:"2-digit", month:"short", year:"numeric", hour:"2-digit", minute:"2-digit", hour12:false
+  }).replace(",", "") + " " +
+  (Intl.DateTimeFormat().resolvedOptions().timeZone || "local time");
+}
+
+function render(a) {
+  $("m-company").textContent = COMPANY;
+  $("m-fy").textContent = a.fy;
+  $("m-ccy").textContent = CURRENCY_LONG;
+  $("m-count").textContent = int0(a.count) + " trading locations";
+  $("m-source").textContent = "Outlet P&L tab, row " + a.headerRow + " header";
+  $("foot-src").textContent =
+    "Read live from the Outlet P&L tab · header located on row " + a.headerRow +
+    " · " + int0(a.count) + " outlets · " + CURRENCY_LONG;
+
+  const rep = $("report");
+  rep.innerHTML = buildReport(a);
+  rep.hidden = false;
+  renderTable(a);
+  drawCharts(a);
+}
+
+async function load() {
+  if (busy) return;
+  const target = resolveTarget();
+  if (!target.configured) { showSetup(); return; }
+
+  setBusy(true);
+  clearStates();
+  if (!lastGood) $("loading").hidden = false;
+
+  try {
+    const payload = await loadSheet(target);
+    const parsed = parseTable(payload);
+    const a = analyse(parsed);
+    destroyAllCharts();
+    $("loading").hidden = true;
+    render(a);
+    const stamp = stampNow();
+    $("m-updated").textContent = stamp;
+    lastGood = { a, stamp };
+    clearStates();
+  } catch (err) {
+    console.error(err);
+    showError(err instanceof GvizError ? err
+      : new GvizError("unknown", err && err.message ? err.message : String(err)));
+    if (!lastGood) {
+      $("m-updated").textContent = "not loaded";
+      $("report").hidden = true;
+    }
+  } finally {
+    setBusy(false);
+    $("report").classList.remove("stale");
+  }
+}
+
+const resizeAll = () => CHARTS.forEach(c => { try { c.resize(); } catch (e) {} });
+window.addEventListener("beforeprint", resizeAll);
+window.addEventListener("afterprint", resizeAll);
+if (window.matchMedia) {
+  const mq = window.matchMedia("print");
+  if (mq.addEventListener) mq.addEventListener("change", resizeAll);
+}
+
+$("refresh").addEventListener("click", load);
+window.addEventListener("DOMContentLoaded", load);
+if (document.readyState !== "loading") load();
+</script>
+</body>
+</html>
