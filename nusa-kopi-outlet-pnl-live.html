@@ -392,9 +392,13 @@ footer.foot{
    in the URL while that tab is selected, NOT its position).
    ═════════════════════════════════════════════════════════════════════════ */
 
-const SHEET_ID = "PASTE_SHEET_ID_HERE";   // e.g. "1AbC…xyz"  (between /d/ and /edit)
-const TAB_GID  = "PASTE_TAB_GID_HERE";    // e.g. "1234567890" (the gid= number)
-const TAB_NAME = "Outlet P&L";            // used only if TAB_GID is left unset
+const SHEET_ID = "1qdzRFxV_i1ecR7QPsfW5gRs_jQTivm0GVyd17HN5nUc";
+const TAB_GID  = "";                      // the share link carried no gid=, so the
+                                          // tab is looked up by name instead. To pin
+                                          // it: open the Outlet P&L tab in Google
+                                          // Sheets and copy the gid= number from the
+                                          // address bar into here.
+const TAB_NAME = "Outlet P&L";            // used whenever TAB_GID is left empty
 
 /* Presentation constants */
 const COMPANY            = "Nusa Kopi Group Sdn Bhd";
@@ -487,15 +491,20 @@ function resolveTarget() {
 
 function buildUrl(target, callbackName) {
   const base = "https://docs.google.com/spreadsheets/d/" + encodeURIComponent(target.id) + "/gviz/tq";
-  const p = new URLSearchParams();
-  // headers=0 => gviz returns every physical row as data, so the four title
-  // rows arrive intact and we can locate the real header ourselves.
-  p.set("headers", "0");
-  p.set("tqx", "out:json;responseHandler:" + callbackName);
-  if (target.gid) p.set("gid", target.gid);
-  else p.set("sheet", TAB_NAME);
-  p.set("_cb", String(Date.now()));   // defeat the browser cache on Refresh
-  return base + "?" + p.toString();
+  // Built by hand rather than with URLSearchParams: the colons and semicolon
+  // inside tqx are legal in a query string and gviz expects them raw, not
+  // percent-encoded. The tab is addressed by gid when there is one, and by
+  // name otherwise (a "?usp=sharing" link carries no gid).
+  const parts = [
+    // headers=0 => gviz returns every physical row as data, so the four title
+    // rows arrive intact and we can locate the real header ourselves.
+    "headers=0",
+    "tqx=out:json;responseHandler:" + callbackName,
+    target.gid ? "gid=" + encodeURIComponent(target.gid)
+               : "sheet=" + encodeURIComponent(TAB_NAME),
+    "_cb=" + Date.now()   // defeat the browser cache on Refresh
+  ];
+  return base + "?" + parts.join("&");
 }
 
 function loadSheet(target) {
@@ -1929,7 +1938,8 @@ function showSetup() {
 function showError(err) {
   $("loading").hidden = true;
   const kind = (err && err.kind) || "unknown";
-  const causes = {
+  const byName = !resolveTarget().gid;
+  let causes = {
     sharing: [
       "The sheet is not shared publicly. In Google Sheets: <b>Share → General access → Anyone with the link → Viewer</b>. A sheet shared only with named people cannot be read by this page.",
       "The link you took the id from may point to a copy you own but have not shared."
@@ -1944,6 +1954,7 @@ function showError(err) {
       "The sheet id is right but the tab is not — check <code>TAB_GID</code> against the <code>gid=</code> number shown while the <b>Outlet P&amp;L</b> tab is selected.",
       "The tab may have been renamed, in which case update <code>TAB_NAME</code> too."
     ],
+    tab: [],
     timeout: [
       "Google did not respond. Try Refresh; if it keeps failing, check that the sheet is still shared and reachable."
     ],
@@ -1955,6 +1966,15 @@ function showError(err) {
       "The tab was reached but no outlet rows were found below the header. Rows are only read when they carry an outlet code and a positive net revenue, which is what keeps the total and the reconciliation block out."
     ]
   }[kind] || ["An unexpected problem occurred while reading the sheet."];
+
+  if (byName && (kind === "network" || kind === "target" || kind === "header" || kind === "empty")) {
+    causes = causes.concat([
+      "This page is finding the tab <b>by name</b> (<code>" + esc(TAB_NAME) + "</code>) because the " +
+      "share link carried no <code>gid=</code>. If that tab has been renamed, update <code>TAB_NAME</code> " +
+      "— or open the tab in Google Sheets, copy the <code>gid=</code> number out of the address bar, " +
+      "and set <code>TAB_GID</code> to pin it."
+    ]);
+  }
 
   $("states").innerHTML =
     '<div class="panel error"><span class="tag">Could not load the sheet</span>' +
